@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<!-- 회원 -->
+		<typeAlias type="com.pet.web.vo.MemberVO" alias="Member"/>
+		
+		<!-- 동물 백과 -->
+		<typeAlias type="com.pet.web.vo.AnimalDataPhotoSaveVO" alias="AnimalPhotoSave"/>
+		<typeAlias type="com.pet.web.vo.AnimalDataVO" alias="AnimalData"/>
+		
+		<!-- 자유게시판 -->
+		<typeAlias type="com.pet.web.vo.FreeBoardVO" alias="FreeBoard"/>
+		<typeAlias type="com.pet.web.vo.FreeHashtagVO" alias="FreeHashtag"/>
+		<typeAlias type="com.pet.web.vo.FreeLikesVO" alias="FreeLikes"/>
+		<typeAlias type="com.pet.web.vo.FreeReplyVO" alias="FreeReply"/>
+		<typeAlias type="com.pet.web.vo.FreeBoardSaveVO" alias="FreeBoardSave"/>
+		
+		<!-- 메신저 -->
+		<typeAlias type="com.pet.web.vo.ChatVO" alias="Chat"/>
+		
+		<!-- 사진게시판 -->
+		<typeAlias type="com.pet.web.vo.PhotoBoardSaveVO" alias="PhotoBoardSave"/>
+		<typeAlias type="com.pet.web.vo.PhotoBoardVO" alias="PhotoBoard"/>
+		<typeAlias type="com.pet.web.vo.PhotoHashtagVO" alias="PhotoHashtag"/>
+		<typeAlias type="com.pet.web.vo.PhotoLikesVO" alias="PhotoLikes"/>
+		<typeAlias type="com.pet.web.vo.PhotoReplyVO" alias="PhotoReply"/>
+		
+		<!-- 팁 -->
+		<typeAlias type="com.pet.web.vo.TipVO" alias="Tip"/>
+		
+		<!-- 거래게시판 -->
+		<typeAlias type="com.pet.web.vo.TradeBoardSaveVO" alias="TradeBoardSave"/>
+		<typeAlias type="com.pet.web.vo.TradeBoardVO" alias="TradeBoard"/>
+		<typeAlias type="com.pet.web.vo.TradeHashtagVO" alias="TradeHashtag"/>
+		
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="memberMapper.xml"/>
+		<mapper resource="freeBoardMapper.xml"/>
+		<mapper resource="photoBoardMapper.xml"/>
+		<mapper resource="tradeBoardMapper.xml"/>
+		<mapper resource="tipMapper.xml"/>
+		<mapper resource="chatMapper.xml"/>
+	</mappers>
+	
+</configuration>

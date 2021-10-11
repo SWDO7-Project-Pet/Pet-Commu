@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.web.dao.TradeBoardMapper">
+
+	<!-- 전체 글 조회 -->
+	<select id="selectAllTradeBoard" resultType="TradeBoard">
+		select
+		    trade_board_num as tradeBoardNum
+		    ,trade_board_title as tradeBoardTitle
+		    ,member_id as memberId
+		    ,to_char(trade_board_indate, 'yy-MM-DD') as tradeBoardIndate	 
+		    ,trade_board_hits as tradeBoardHits
+		    ,trade_board_content as tradeBoardContent
+		    ,trade_board_thumbnail_st as tradeBoardThumbnailSt
+	    	,trade_board_thumbnail_or as tradeBoardThumbnailOr
+		from
+		    trade_board
+		order by
+		    trade_board_num desc		    
+	</select>
+		
+	<!-- 글 작성 -->
+	<insert id="tradeBoardWrite" parameterType="TradeBoard">
+		insert into 
+	    	trade_board(
+	    		trade_board_num
+	    		,trade_board_title
+	    		,trade_board_content
+	    		,member_id
+	    		,trade_board_thumbnail_st
+	    		,trade_board_thumbnail_or
+	    	) values(
+	    	 tradeboard_seq.nextval
+	        ,#{tradeBoardTitle}
+	        ,#{tradeBoardContent}
+	        ,#{memberId}
+	        ,#{tradeBoardThumbnailSt }
+	  		,#{tradeBoardThumbnailOr }
+    	)
+	</insert>
+	
+	<!-- 선택 글 상세보기 -->
+	<select id="tradeBoardRead" resultType="TradeBoard" parameterType="int">
+		select
+		    trade_board_num as tradeBoardNum
+		    ,trade_board_title as tradeBoardTitle
+		    ,trade_board_content as tradeBoardContent
+		    ,member_id as memberId
+		    ,to_char(trade_board_indate, 'yy-MM-DD') as tradeBoardIndate	 
+		    ,trade_board_hits as tradeBoardHits
+		    ,trade_board_thumbnail_st as tradeBoardThumbnailSt
+	    	,trade_board_thumbnail_or as tradeBoardThumbnailOr
+		from
+			trade_board
+		where
+			trade_board_num = #{tradeBoardNum}						
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateHitsCount">
+	    update
+	  		trade_board
+	  	set
+	  		trade_board_hits = trade_board_hits + 1
+	  	where
+	  		trade_board_num = #{tradeBoardNum}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="tradeBoardDelete" parameterType="int">
+		 delete from
+		 	trade_board
+		 where
+		 	trade_board_num = #{tradeBoardNum}
+	</delete>
+	
+	  <!-- 최신글 찾기 -->
+	  <select id="selectBoardNum" resultType="int">
+	  	select
+	  		max(trade_board_num) as tradeBoardNum
+	  	from
+	  		trade_board
+	  </select>
+	   	  
+  	  <!-- 본문 파일 db에 저장 -->
+  	  <insert id="savedTradePhoto" parameterType="TradeBoardSave">
+  	  	insert into
+	  		trade_board_save
+	  	values(
+	  		#{tradeBoardNum }
+	  		,#{tradeBoardPhotoOr }
+	  		,#{tradeBoardPhotoSt }
+	  	)
+  	  </insert>
+  	  
+  	  <!-- 파일정보 가져오기 -->
+	  <select id="getFileInfo" parameterType="int" resultType="TradeBoardSave">
+	  	select
+	  		trade_board_num as tradeBoardNum
+	  		,trade_board_photo_or as tradeBoardPhotoOr
+	  		,trade_board_photo_st as tradeBoardPhotoSt
+	  	from
+	  		trade_board_save
+	  	where
+	  		trade_board_num = #{tradeBoardNum}
+	  </select>
+	  
+	  <!-- 검색(안씀) -->
+	  <select id="searchTradeBoard" parameterType="HashMap" resultType="TradeBoard">
+		select
+			 trade_board_num as tradeBoardNum
+		    ,trade_board_title as tradeBoardTitle
+		    ,member_id as memberId
+		    ,to_char(trade_board_indate, 'yy-MM-DD') as tradeBoardIndate	 
+		    ,trade_board_hits as tradeBoardHits
+		    ,trade_board_content as tradeBoardContent
+		    ,trade_board_thumbnail_st as tradeBoardThumbnailSt
+	    	,trade_board_thumbnail_or as tradeBoardThumbnailOr
+		from
+			trade_board
+		<where>
+			<if test="condition == 'tradeBoardTitle'">
+				upper(trade_board_title) like '%' || upper(#{keyword }) || '%'
+			</if>
+			<if test="condition == 'tradeBoardContent'">
+				upper(trade_board_content) like '%' || upper(#{keyword }) || '%'
+			</if>
+			<if test="condition == 'memberId'">
+				upper(member_id) like '%' || upper(#{keyword }) || '%'
+			</if>
+		</where>
+		order by
+			trade_board_num desc
+	</select>
+	
+	<!-- 글 수정 -->
+	<update id="tradeBoardUpdate" parameterType="TradeBoard">
+		update
+	  		trade_board
+	  	set
+	  		trade_board_title = #{tradeBoardTitle }
+	  		,trade_board_content = #{tradeBoardContent }
+	  		,trade_board_thumbnail_st = #{tradeBoardThumbnailSt}
+	  		,trade_board_thumbnail_or = #{tradeBoardThumbnailOr}
+	  	where
+	  		trade_board_num = #{tradeBoardNum}
+	</update>
+	
+	<!-- 기존 사진 db 삭제 -->
+	<delete id="deleteTradeBoardb" parameterType="int">
+		delete from
+			trade_board_save
+		where
+			trade_board_num = #{tradeBoardNum}
+	</delete>
+	
+	<!-- 전체글 개수 출력 -->
+	<select id="getTotalCount" resultType="int">
+		select
+			count(*) as totalRecordsCount
+		from
+			trade_board
+	</select>
+	
+	<!-- 전체 글 리스트 출력 (페이징), 검색 -->
+	<select id="getBoardList" parameterType="TradeBoard" resultType="TradeBoard">
+		select
+		    ot.trade_board_num as tradeBoardNum
+		    ,ot.trade_board_title as tradeBoardTitle
+		    ,ot.member_id as memberId
+		    ,ot.trade_board_indate as tradeBoardIndate	 
+		    ,ot.trade_board_hits as tradeBoardHits
+		    ,ot.trade_board_content as tradeBoardContent
+		    ,ot.trade_board_thumbnail_st as tradeBoardThumbnailSt
+	    	,ot.trade_board_thumbnail_or as tradeBoardThumbnailOr
+		from
+    		trade_board ot
+    		,(select rownum as r_num, trade_board_num as b_num from trade_board order by trade_board_num desc) rt
+		where
+    		ot.trade_board_num = rt.b_num
+	 	<choose>
+	 		<!-- 어떠한 검색어도 없다면 무한스크롤 -->
+	 		<when test="tradeBoardTitle == null and tradeBoardContent == null and memberId == null">
+	 			and rt.r_num between #{startRowNum} and #{rowCount}			
+	 		</when>
+	        <!-- if문과 비슷한 구조임, subject가 둘 null이 아니라면, 제목 검색 -->
+	        <when test="tradeBoardTitle != null">
+	            and upper(ot.trade_board_title) like '%' || upper(#{tradeBoardTitle }) || '%'
+	        </when>
+	        <!--content가 null이 아니라면-->
+	        <when test="tradeBoardContent != null">
+	            and upper(ot.trade_board_content) like '%' || upper(#{tradeBoardContent }) || '%'
+	        </when>
+	        <!--writer가 null이 아니라면-->
+	        <when test="memberId != null">
+	            and upper(ot.member_id) like '%' || upper(#{memberId }) || '%'
+	        </when>
+	    </choose>
+		order by
+    		ot.trade_board_num desc
+	</select>
+	
+    	 	
+</mapper>

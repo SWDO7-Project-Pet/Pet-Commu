@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.web.dao.FreeBoardMapper">
+
+	<!-- 전체 글 목록 보기(최신글 순) -->
+	<select id="selectAllFreeBoard" resultType="FreeBoard">
+		select
+		    free_board_num as freeBoardNum
+		    ,free_board_title as freeBoardTitle
+		    ,member_id as memberId
+		    ,to_char(free_board_indate, 'yy-MM-DD') as freeBoardIndate	 
+		    ,free_board_hits as freeBoardHits
+		    ,free_board_likes as freeBoardLikes
+		    ,free_board_ReplyCount as freeBoardReplyCount
+		from
+		    free_board
+		order by
+		    free_board_num desc
+	</select>
+	
+	<!-- 자유게시판 글 쓰기 -->
+	<insert id="freeBoardWrite" parameterType="FreeBoard">
+		insert into
+		    free_board(
+		        free_board_num
+		        ,free_board_title
+		        ,free_board_content
+		        ,member_id   
+		    ) values(
+		        freeboard_seq.nextval
+		        ,#{freeBoardTitle}
+		        ,#{freeBoardContent}
+		        ,#{memberId}
+		    )
+	</insert>
+	
+	<!-- 선택 글 상세보기 -->
+	<select id="freeBoardRead" resultType="FreeBoard" parameterType="int">
+		select
+		    free_board_num as freeBoardNum
+		    ,free_board_title as freeBoardTitle
+		    ,free_board_content as freeBoardContent
+		    ,member_id as memberId
+		    ,to_char(free_board_indate, 'yy-MM-DD') as freeBoardIndate	 
+		    ,free_board_hits as freeBoardHits
+		    ,free_board_likes as freeBoardLikes
+		from
+			free_board
+		where
+			free_board_num = #{freeBoardNum}						
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateHitsCount">
+	    update
+	  		free_board
+	  	set
+	  		free_board_hits = free_board_hits + 1
+	  	where
+	  		free_board_num = #{freeBoardNum}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="freeBoardDelete" parameterType="int">
+		 delete from
+		 	free_board
+		 where
+		 	free_board_num = #{freeBoardNum}
+	</delete>
+	
+	<!-- 글 수정 -->
+	<update id="freeBoardUpdate" parameterType="FreeBoard">
+	  	update
+	  		free_board
+	  	set
+	  		free_board_title = #{freeBoardTitle }
+	  		,free_board_content = #{freeBoardContent }
+	  	where
+	  		free_board_num = #{freeBoardNum}
+	</update>
+	
+	<!-- 댓글 작성 -->
+    <insert id="freeReplyWrite" parameterType="FreeReply">
+		insert into
+		    free_reply(
+		        free_reply_num
+		        ,free_reply_content
+		        ,free_board_num
+		        ,member_id   
+		    ) values(
+		        free_reply_seq.nextval
+		        ,#{freeReplyContent}
+		        ,#{freeBoardNum}
+		        ,#{memberId}
+		    )
+    </insert>
+	
+	<!-- 댓글 읽기 -->
+	  <select id="readAllFreeReply" parameterType="int" resultType="FreeReply">
+	  	select
+	  		free_reply_num as freeReplyNum
+	  		,free_reply_content as freeReplyContent
+	  		,to_char(free_reply_indate, 'yy-MM-DD') as freeReplyIndate
+	  		,free_board_num as freeBoardNum
+	  		,member_id as memberId
+	  	from
+	  		free_reply
+	  	where
+	  		free_board_num = #{freeBoardNum}
+	  	order by
+	  		free_reply_indate
+	  </select>
+	  
+	  <!-- 댓글 삭제 -->
+	    <delete id="freeReplyDelete" parameterType="int">
+		  	delete from
+		  		free_reply
+		  	where
+		  		free_reply_num = #{freeReplyNum}
+		</delete>
+		
+	  <!-- 댓글 수정 -->	
+	    <update id="freeReplyUpdate" parameterType="FreeReply">
+		  	update
+		  		free_reply
+		  	set
+		  		free_reply_content = #{freeReplyContent}
+		  	where
+		  		free_reply_num = #{freeReplyNum}
+	   </update>
+	   
+	   <!-- 댓글 개수 -->
+	  	<select id="replyCount" parameterType="int" resultType="int">
+			select
+				count(*)
+			from
+				free_reply
+			where
+				free_board_num = #{freeBoardNum }
+		</select>
+	  
+	  	<!-- 댓글 개수 증가 -->
+	  	<update id="increaseReplyNum" parameterType="int">
+			update
+				free_board
+			set
+				free_board_ReplyCount = free_board_ReplyCount + 1
+			where
+				free_board_num = #{freeBoardNum }
+		</update>
+		
+	  	<!-- 댓글 개수 감소 -->
+	  	<update id="reductionReplyNum" parameterType="int">
+			update
+				free_board
+			set
+				free_board_ReplyCount = free_board_ReplyCount - 1
+			where
+				free_board_num = #{freeBoardNum }
+		</update>	
+			
+	  
+	  <!-- 좋아요 저장 -->
+	  	<insert id="recordLikes" parameterType="HashMap">
+			insert into
+				free_likes
+			values (
+				#{memberId }
+				,#{freeBoardNum }
+			)
+		</insert>
+	
+		<!-- 좋아요 수 올리기 -->
+		<update id="increaseLikesNum" parameterType="int">
+			update
+				free_board
+			set
+				free_board_likes = free_board_likes + 1
+			where
+				free_board_num = #{freeBoardNum }
+		</update>
+		
+		<!-- 좋아요 여부 확인 -->
+		<select id="checklikes" parameterType="HashMap" resultType="HashMap">
+			select
+				member_id as memberId
+				,free_board_num as freeBoardNum
+			from
+				free_likes
+			where
+				member_id = #{memberId }
+				and
+				free_board_num = #{freeBoardNum }
+	  	</select>
+	  	
+	  	<!-- 좋아요 삭제 -->
+	  	<delete id="deleteLikes" parameterType="HashMap">
+	  		delete from
+				free_likes
+			where
+				member_id = #{memberId }
+				and
+				free_board_num = #{freeBoardNum }
+	  	</delete>
+	  	
+	  	<!-- 좋아요 수 감소 --> 
+	  	<update id="reductionLikesNum" parameterType="int">
+			update
+				free_board
+			set
+				free_board_likes = free_board_likes - 1
+			where
+				free_board_num = #{freeBoardNum }
+		</update>
+		
+		<!-- 글별 좋아요 수 -->
+		<select id="countLikes" parameterType="int" resultType="int">
+			select
+				count(*)
+			from
+				free_likes
+			where
+				free_board_num = #{freeBoardNum }
+		</select>
+		
+		  <!-- 검색 -->
+		  <select id="searchFreeBoard" parameterType="HashMap" resultType="FreeBoard">
+		  	select
+			    free_board_num as freeBoardNum
+			    ,free_board_title as freeBoardTitle
+			    ,member_id as memberId
+			    ,to_char(free_board_indate,'yy-MM-DD') as freeBoardIndate	 
+			    ,free_board_hits as freeBoardHits
+			    ,free_board_likes as freeBoardLikes
+		  	from
+		  		free_board
+		  	<where>
+		  		<if test="condition == 'freeBoardTitle'">
+		  			upper(free_board_title) like '%' || upper(#{searchWord}) || '%'
+		  		</if>
+		  		<if test="condition == 'freeBoardContent'">
+		  			upper(free_board_content) like '%' || upper(#{searchWord}) || '%'
+		  		</if>
+		  		<if test="condition == 'memberId'">
+		  			upper(member_id) like '%' || upper(#{searchWord}) || '%'
+		  		</if>
+		  	</where>
+		  	order by
+		  		free_board_num desc
+		  </select>	
+		  
+		   <!-- 메뉴바 통합 검색 -->	
+		   <select id="searchAllFreeBoard" parameterType="String" resultType="FreeBoard">
+		  	select
+			    free_board_num as freeBoardNum
+			    ,free_board_title as freeBoardTitle
+			    ,member_id as memberId
+			    ,to_char(free_board_indate,'yy-MM-DD') as freeBoardIndate	 
+			    ,free_board_hits as freeBoardHits
+			    ,free_board_likes as freeBoardLikes
+		  	from
+		  		free_board
+		  	where
+		  		upper(free_board_title) like '%' || upper(#{searchWord}) || '%'
+		  		or
+		  		upper(free_board_content) like '%' || upper(#{searchWord}) || '%'
+		  		or
+		  		upper(member_id) like '%' || upper(#{searchWord}) || '%'
+		  	order by
+		  		free_board_num desc
+		  </select>	
+		  
+		  <!-- 해시태그 추가 -->
+		  	<insert id="insertHashTag" parameterType="FreeHashtag">
+				insert into
+				    free_hashtag(
+				        free_board_num
+				        ,hashtag  
+				    ) values(				        
+				        #{freeBoardNum}
+				        ,#{hashTag}
+				    )
+			</insert>
+		
+	      <!-- 해시태그 여부 확인 -->
+	      <select id="checkHashTag" parameterType="HashMap" resultType="HashMap">
+			select				
+				free_board_num as freeBoardNum
+				,hashtag as hashTag
+			from
+				free_hashtag
+			where
+				free_board_num = #{freeBoardNum }
+				and
+				hashtag = #{hashTag}
+	  	  </select>
+	  	  
+	  	  <!-- 해시태그 조회 -->
+	  	  <select id="searchHashtag" parameterType="int" resultType="FreeHashtag">
+	  	  	select
+	  	  		free_board_num as freeBoardNum
+	  	  		,hashtag as hashTag
+	  	  	from
+	  	  		free_hashtag
+			where
+				free_board_num = #{freeBoardNum }
+	  	  </select>
+		  
+		  <!-- 최신글 찾기 -->
+		  <select id="selectBoardNum" resultType="int">
+		  	select
+		  		max(free_board_num) as freeBoardNum
+		  	from
+		  		free_board
+		  </select>
+		  
+		  <!-- 해시태그 조회 -->
+	  	  <select id="searchAllHashtag" resultType="FreeHashtag">
+	  	  	select
+	  	  		free_board_num as freeBoardNum
+	  	  		,hashtag as hashTag
+	  	  	from
+	  	  		free_hashtag
+	  	  </select>
+	  	  
+	  	  <!-- 해시태그 삭제 -->
+	  	  <delete id="deleteHashtag" parameterType="int">
+	  	  	delete from
+	  	  		free_hashtag
+	  	  	where
+	  	  		free_board_num = #{freeBoardNum }
+	  	  </delete>
+	  	  
+	  	  <!-- 해시태그 검색을 위한 resultMap -->
+	  	  <resultMap type="freeHashtag" id="freeHashtagMap">
+	  	  	<result property="freeBoardNum" column="free_board_num"/>
+	  	  	<result property="hashTag" column="hashtag"/>
+	  	  </resultMap>	  	 	  	  
+	  	  
+	  	  <resultMap type="freeBoard" id="freeBoardMap">
+	  	  	<id property="freeBoardNum" column="free_board_num"/>
+	  	  	<result property="freeBoardTitle" column="free_board_title"/>
+	  	  	<result property="memberId" column="member_id"/>
+	  	  	<result property="freeBoardIndate" column="free_board_indate"/>
+	  	  	<result property="freeBoardHits" column="free_board_hits"/>
+	  	  	<result property="freeBoardLikes" column="free_board_likes"/>
+	  	  	<result property="freeBoardReplyCount" column="free_board_replycount"/>
+	  	  	<collection property="freeHash" resultMap="freeHashtagMap"/>
+	  	  </resultMap>
+	  	  	  	  
+	  	   <select id="freeBoardfindTag" parameterType="String" resultMap="freeBoardMap">
+	  	  	select
+			    b.free_board_num
+			    ,b.free_board_title
+			    ,b.member_id
+			    ,b.free_board_indate
+			    ,b.free_board_hits
+			    ,b.free_board_likes
+			    ,b.free_board_replycount
+			    ,h.hashtag
+			from
+			    free_board b,free_hashtag h
+			where
+			    b.free_board_num = h.free_board_num
+			    and
+			    h.hashtag = #{searchTag}
+			order by
+		  		b.free_board_num desc
+	  	  </select>
+	  	  <!-- end resultMap -->
+	  	  
+	  	  <!-- 조회수 높은 순 전체 글 목록 보기 -->
+		<select id="selectBestFreeBoard" resultType="FreeBoard">
+			select
+			    free_board_num as freeBoardNum
+			    ,free_board_title as freeBoardTitle
+			    ,member_id as memberId
+			from
+			    free_board
+			order by
+			    free_board_hits desc
+		</select>
+	
+		  
+</mapper>

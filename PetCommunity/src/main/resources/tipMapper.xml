@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.web.dao.TipMapper">
+
+   <select id="selectTip" resultType="Tip">
+   select   
+      tip_num as tipNum
+      ,tip_title as tipTitle
+      ,tip_content as tipContent
+      ,tip_indate as tipIndate
+      ,member_id as memberId
+   from
+      tip
+   </select>
+   
+    <insert id="insertTip" parameterType="Tip">
+   	insert into
+   		tip(
+   			tip_num 
+      		,tip_title 
+      		,tip_content 
+      		,tip_indate
+      		,member_id 
+   		)values(
+   			tip_seq.nextval
+   			,#{tipTitle }
+   			,#{tipContent }
+   			,DEFAULT
+   			,#{memberId }
+ 		)
+   </insert>
+   
+   <delete id="deleteTip" parameterType="int">
+   	delete
+   		tip
+   	where
+   		tip_num = #{tipNum }
+   </delete>
+   
+   <delete id="deleteAnimal" parameterType="int">
+   	delete
+   		animal_data
+   	where
+   		animal_num = #{animalNum }
+   </delete>
+   
+   <update id="updateTip" parameterType="Tip">
+   	update
+   		tip
+   	set
+   		tip_title = #{tipTitle }
+   		,tip_content = #{tipContent }
+   	where
+   		tip_num = #{tipNum }
+   </update>
+   
+   <select id="selectAnimalNum" resultType="int">
+   	select
+   		max(animal_num) as animalNum
+   	from
+   		animal_data
+   </select>
+   
+   <insert id="insertAnimal" parameterType="AnimalData">
+   	insert into
+   		animal_data(
+   			animal_num
+   			,animal_kind
+   			,animal_thumbnail_or
+   			,animal_thumbnail_st
+   			,animal_variety
+   			,animal_outline
+   			,animal_origin
+   			,animal_size
+   			,animal_height
+   			,animal_weight
+   			,animal_appearance
+   			,animal_color
+   			,animal_personality
+   			,animal_purpose
+   			,animal_disease
+   			,animal_recommend
+   			,member_id
+   		)values(
+ 			animal_data_seq.nextval
+ 			,#{animalKind }
+ 			,#{animalThumbnailOr}
+ 			,#{animalThumbnailSt}
+ 			,#{animalVariety}
+ 			,#{animalOutline}
+ 			,#{animalOrigin}
+ 			,#{animalSize}
+ 			,#{animalHeight}
+ 			,#{animalWeight}
+ 			,#{animalAppearance}
+ 			,#{animalColor}
+ 			,#{animalPersonality}
+ 			,#{animalPurpose}
+ 			,#{animalDisease}
+ 			,#{animalRecommend}
+ 			,#{memberId } 			
+ 		)
+   </insert>
+   
+   <update id="updateAnimal" parameterType="AnimalData">
+   	update
+   		animal_data
+   	set
+   		animal_num = #{animalNum }
+   		,animal_kind = #{animalKind }
+   		,animal_variety = #{animalVariety}
+   		,animal_outline = #{animalOutline}
+   		,animal_origin = #{animalOrigin}
+   		,animal_size = #{animalSize}
+   		,animal_height = #{animalHeight}
+   		,animal_weight = #{animalWeight}
+   		,animal_appearance = #{animalAppearance}
+   		,animal_color = #{animalColor}
+   		,animal_personality =  #{animalPersonality}
+   		,animal_purpose =  #{animalPurpose}
+   		,animal_disease =  #{animalDisease}
+   		,animal_recommend =  #{animalRecommend}
+   	where
+   		animal_num = #{animalNum }
+   </update>
+   
+   <insert id="uploadFile" parameterType="AnimalPhotoSave">
+   	insert into
+ 			animal_data_photo_save
+ 		values(
+ 			#{animalNum }
+ 			,#{adBoardPhotoOr }
+ 			,#{adBoardPhotoSt }
+ 			)
+   </insert>
+   
+   <select id="selectAnimalData" parameterType="String" resultType="AnimalData">
+   select   
+     animal_num as animalNum
+   	,animal_kind as animalKind
+   	,animal_thumbnail_or as animalThumbnailOr
+   	,animal_thumbnail_st as animalThumbnailSt
+   	,animal_variety as animalVariety
+   	,animal_outline as animalOutline
+   	,animal_origin as animalOrigin
+   	,animal_size as animalSize
+   	,animal_height as animalHeight
+   	,animal_weight as animalWeight
+   	,animal_appearance as animalAppearance
+   	,animal_color as animalColor
+   	,animal_personality as animalPersonality
+   	,animal_purpose as animalPurpose
+   	,animal_disease as animalDisease
+   	,animal_recommend as animalRecommend
+   	,member_id as memberId
+   from
+      animal_data
+   where
+   	  animal_kind = #{animalKind }
+   </select>
+   
+   <select id="getFileInfo" parameterType="int" resultType="AnimalData">
+ 	select
+ 	animal_num as animalNum
+   	,animal_kind as animalKind
+   	,animal_thumbnail_or as animalThumbnailOr
+   	,animal_thumbnail_st as animalThumbnailSt
+   	,animal_variety as animalVariety
+   	,animal_outline as animalOutline
+   	,animal_origin as animalOrigin
+   	,animal_size as animalSize
+   	,animal_height as animalHeight
+   	,animal_weight as animalWeight
+   	,animal_appearance as animalAppearance
+   	,animal_color as animalColor
+   	,animal_personality as animalPersonality
+   	,animal_purpose as animalPurpose
+   	,animal_disease as animalDisease
+   	,animal_recommend as animalRecommend
+   	,member_id as memberId
+ 	from
+ 	 animal_data
+ 	where
+ 	 animal_num = #{animalNum }
+ 	</select>
+ 	
+ 	<select id="selectPhoto" parameterType="int" resultType="AnimalPhotoSave">
+ 	select
+ 	 animal_num as animalNum
+ 	 ,ad_board_photo_or as adBoardPhotoOr
+ 	 ,ad_board_photo_st as adBoardPhotoSt
+ 	from
+ 	 animal_data_photo_save
+ 	where
+ 	 animal_num = #{animalNum }
+ 	</select>
+ 	
+</mapper>

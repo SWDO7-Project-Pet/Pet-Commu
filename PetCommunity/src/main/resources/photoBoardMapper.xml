@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.web.dao.PhotoBoardMapper">
+
+ 	<!-- 사진게시판 저장테이블 -->
+ 	<insert id="writeBoard" parameterType="PhotoBoard">
+    insert into photo_board(
+    
+    photo_board_num                       
+    ,photo_board_title                       
+    ,photo_board_content                                   
+    ,photo_board_thumbnail_or  
+    ,photo_board_thumbnail_st
+    ,member_id   
+    
+    )values(
+    
+    photoboard_seq.nextval
+    ,#{photoBoardTitle }
+    ,#{photoBoardContent }
+    ,#{photoBoardThumbnailOr }
+    ,#{photoBoardThumbnailSt }
+    ,#{memberId }
+    
+    )
+ 		
+ 	</insert>
+ 	
+ 	<!-- 사진만 저장 게시판 PhotoBoardSaveVO -->
+ 	<insert id="uploadPhotoBoard" parameterType="PhotoBoardSave">
+    insert into photo_board_save(
+    
+    photo_board_num
+    ,photo_board_photo_or
+    ,photo_board_photo_st
+    )values(
+    
+    #{photoboardNum }
+    ,#{photoBoardPhotoOr }
+    ,#{photoBoardPhotoSt }
+    
+    )
+ 	</insert>
+ 	
+ 	<!-- 사진만 저장한거 전체 불러오기 -->
+ 	<select id="allPhotoBoardsave" resultType="PhotoBoardSave">
+ 	select
+	    photo_board_num as photoboardNum
+	    ,photo_board_photo_or as photoBoardPhotoOr
+	    ,photo_board_photo_st as photoBoardPhotoSt
+	from
+	    photo_board_save
+ 	</select>
+ 	
+ 	<!-- 포토게시판 업데이트 -->
+ 	<update id="photoBoardUpdate" parameterType="PhotoBoard">
+	update
+	    photo_board
+	set
+	    photo_board_title = #{photoBoardTitle }
+	    ,photo_board_content = #{photoBoardContent }
+	    ,photo_board_indate = sysdate
+	    ,photo_board_thumbnail_or = #{photoBoardThumbnailOr }
+	    ,photo_board_thumbnail_st = #{photoBoardThumbnailSt }
+	where
+	    photo_board_num  = #{photoBoardNum }
+		
+	
+	</update>
+	
+	<!-- 게시판삭제 -->
+	<delete id="photoBoardDelete" parameterType="int">
+	delete from
+	    photo_board
+	where
+	    photo_board_num  = #{photoBoardNum }
+	</delete>
+ 	
+ 	<!-- 제목을 가지고 사진 번호 받아오는거 -->
+ 	<select id="selectOnePhotoBoard" parameterType="String" resultType="int">
+ 	    select
+	        photo_board_num                       
+	    from
+	        photo_board
+	    where
+	        photo_board_title = #{photoBoardTitle }
+	        
+ 	</select>
+ 	<!-- 포토게시판 전부가져오기 -->
+ 	<select id="selectAllPhotoBoard" resultType="PhotoBoard" >
+ 	
+	 	select 
+		    photo_board_num		as photoBoardNum
+		    ,photo_board_title	as photoBoardTitle
+		    ,photo_board_content as photoBoardContent
+		    ,photo_board_indate	as photoBoardIndate
+		    ,photo_board_hits	as photoBoardHits
+		    ,photo_board_likes	as photoBoardLikes
+		    ,member_id			as memberId
+		    ,photo_board_thumbnail_or as photoBoardThumbnailOr
+		    ,photo_board_thumbnail_st as photoBoardThumbnailSt
+		from
+		    photo_board 
+		order by 
+		     photo_board_num desc
+ 	
+ 	</select>
+ 	
+ 	<!-- 사진게시판 하나가져오기 -->
+ 	<select id="photoBoardRead" parameterType="int" resultType="PhotoBoard">
+ 	select 
+		    photo_board_num		as photoBoardNum
+		    ,photo_board_title	as photoBoardTitle
+		    ,photo_board_content as photoBoardContent
+		    ,photo_board_indate	as photoBoardIndate
+		    ,photo_board_hits	as photoBoardHits
+		    ,photo_board_likes	as photoBoardLikes
+		    ,member_id			as memberId
+		    ,photo_board_thumbnail_or as photoBoardThumbnailOr
+		    ,photo_board_thumbnail_st as photoBoardThumbnailSt
+		from
+		    photo_board 
+       where
+            photo_board_num = #{photoBoardNum}
+ 	
+ 	</select>
+ 	<!-- 번호받아서 거기에 맞는 게시판 댓글가져오기 -->
+ 	<select id="photoBoardReadReply" parameterType="int" resultType="PhotoReply">
+ 	
+ 	select
+	    photo_reply_num      as photoReplyNum
+	    ,photo_reply_content as photoReplyContent
+	    ,photo_reply_indate  as photoReplyIndate
+	    ,photo_board_num     as photoBoardNum
+	    ,member_id			 as memberId
+	from
+	    photo_reply
+	where
+	    photo_board_num = #{photoBoardNum}
+	order by
+	    photo_reply_num desc
+ 	
+ 	</select>
+ 	<!-- 특정글에 댓글쓰기 -->
+	<insert id="photoBoardReplyWrite" parameterType="PhotoReply">
+	insert into photo_reply(
+    photo_reply_num
+    ,photo_reply_content
+    ,photo_board_num
+    ,member_id   
+    )values(
+    photo_reply_seq.nextval
+    ,#{photoReplyContent}
+    ,#{photoBoardNum}
+    ,#{memberId}
+    )
+	</insert>
+	<!-- 댓글 수정 -->
+	<update id="photoBoardReplyUpdate" parameterType="PhotoReply">
+	update
+	    photo_reply
+	set
+	    photo_reply_content = #{photoReplyContent}
+	where
+	    photo_reply_num  = #{photoReplyNum}
+		
+	
+	</update>
+	<!-- 댓글 삭제 -->
+	<delete id="photoBoardReplyDelete" parameterType="int">
+	delete from
+	    photo_reply
+	where
+	    photo_reply_num  = #{photoReplyNum}
+	
+	</delete>
+	
+	<!-- photoLikesVO 집어넣기 -->
+	<insert id="photoBoardInsertFavorite" parameterType="PhotoLikes">
+	insert into photo_likes(
+	    member_id   
+	    ,photo_board_num
+	)values(
+	    #{memberId}
+	    ,#{photoBoardNum}
+	    )
+	</insert>
+	<!-- photoBoardVO 좋아요 업데이트 -->
+	<update id="photoBoardUpdateFavorite" parameterType="int">
+	
+	update
+	    photo_board
+	set
+	    photo_board_likes  = photo_board_likes  + 1
+	where
+	    photo_board_num  = #{photoBoardNum}
+	
+	</update>
+	
+	<!-- photoLikesVO 삭제하기 -->
+	<delete id="photoBoardDeleteFavorite" parameterType="PhotoLikes">
+	delete from 
+	    photo_likes
+	where
+	    member_id = #{memberId}
+	and
+	    photo_board_num = #{photoBoardNum}
+	</delete>
+	
+	<!-- photoBoardVO 좋아요취소 업데이트 -->
+	<update id="photoBoardUpdateFavoriteCancel" parameterType="int">
+	
+	update
+	    photo_board
+	set
+	    photo_board_likes  = photo_board_likes - 1
+	where
+	    photo_board_num  = #{photoBoardNum}
+	
+	</update>
+	
+	<!-- 사진게시판 메인엣어 id값비교해서 좋아요 누른지안누른지확인하기위한 좋아요vo불러오기 -->
+	
+	<select id="allFavorite" parameterType="String" resultType="HashMap">
+	select
+	    member_id
+	    ,photo_board_num
+	from
+	    photo_likes
+	where
+	    member_id = #{memberId}
+	
+	</select>
+	<!-- 해쉬태그 insert -->
+	<insert id="insertPBHashTag" parameterType="PhotoHashtag">
+	
+insert into photo_hashtag(   
+    photo_board_num
+    ,hashtag
+)values(
+    #{photoBoardNum}
+    ,#{hashtag}
+    )
+    
+	</insert>
+	
+	<!-- hashtag 다 가져오기 -->
+	<select id="allPBHashTag" resultType="PhotoHashtag">
+	
+	select
+	    photo_board_num as photoBoardNum
+	    ,hashtag
+	from
+	    photo_hashtag
+	
+	</select>
+	
+	<!-- hashtag 삭제 -->
+	<delete id="deletePBHashTag" parameterType="int">
+
+	delete from
+	    photo_hashtag
+	where
+	    photo_board_num  = #{photoBoardNum}
+	
+	</delete>
+	
+	<select id="allPhotoReply" resultType="PhotoReply">
+	
+	select
+	    photo_reply_num as photoReplyNum
+	    ,photo_reply_content as photoReplyContent
+	    ,to_char(photo_reply_indate,'yy/MM/DD') as photoReplyIndate
+	    ,photo_board_num as photoBoardNum
+	    ,member_id as memberId
+	from
+	    photo_reply
+	
+	</select>
+	
+	
+	<select id="getListCnt" resultType="int">
+	
+	select
+	    count(photo_board_num) as countBoard
+	from
+	    photo_board
+	
+	</select>
+
+	
+	
+</mapper>

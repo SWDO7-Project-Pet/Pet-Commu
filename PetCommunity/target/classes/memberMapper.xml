@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.web.dao.MemberMapper">
+<insert id="join" parameterType="Member">
+insert into ac_member (
+	member_id,
+	member_pw,
+	member_names,
+	member_birth,
+	member_phone,
+	member_photo_or,
+	member_photo_st
+) values (
+	#{memberId},
+	#{memberPw},
+	#{memberNames},
+	#{memberBirth},
+	#{memberPhone},
+	#{memberPhotoOr},
+	#{memberPhotoSt}
+)
+</insert>
+
+<select id="login" parameterType="Member" resultType="Member">
+		select
+			member_id as memberId
+			,member_code as memberCode
+		from
+			ac_member
+		where
+			member_id = #{memberId} and
+			member_pw = #{memberPw}
+</select>
+
+<select id="idCheck" resultType="int">
+select
+	count(*)
+from 
+	ac_member
+where
+	member_Id = #{memberId}
+</select>
+
+<select id="selectId" parameterType="String" resultType="Member">
+select
+	member_id as memberId,
+	member_pw as memberPw,
+	member_names as memberNames,
+	member_birth as memberBirth,
+	member_phone as memberPhone,
+	member_photo_or as memberPhotoOr,
+	member_photo_st as memberPhotoSt
+from
+	ac_member
+where
+	member_id = #{memberId}
+</select>
+
+<update id="updateMember" parameterType="Member">
+update
+	ac_member
+set
+	member_pw = #{memberPw},
+	member_names = #{memberNames},
+	member_birth = #{memberBirth},
+	member_phone = #{memberPhone},
+	member_photo_or = #{memberPhotoOr},
+	member_photo_st = #{memberPhotoSt}
+where
+	member_id = #{memberId}
+</update>
+</mapper>
