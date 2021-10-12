@@ -57,7 +57,8 @@ public class MemberController {
 		logger.info("join 메소드 실행(POST)");
 		
 		String saveFileName = FileService.saveFile(uploadFile, "c:/Upload Files");
-		boolean result = service.join(memberId, memberPw, memberNames, memberBirth, memberPhone, saveFileName, uploadFile.getOriginalFilename());
+		String originalFilename = uploadFile.getOriginalFilename();
+		boolean result = service.join(memberId, memberPw, memberNames, memberBirth, memberPhone, saveFileName, originalFilename);
 		
 		String returnUrl;
 		if(result) {
@@ -90,11 +91,6 @@ public class MemberController {
 			session.setAttribute("memberId", memberId);
 			returnUrl = "redirect:/";
 		}
-		
-		if(login.getMemberCode() == 9) {
-			session.setAttribute("code", login.getMemberCode());			
-		}
-		
 		return returnUrl;
 	}
 	

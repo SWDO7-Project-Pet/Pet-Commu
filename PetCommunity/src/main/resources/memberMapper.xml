@@ -18,8 +18,8 @@ insert into ac_member (
 	#{memberNames},
 	#{memberBirth},
 	#{memberPhone},
-	#{memberPhotoOr},
-	#{memberPhotoSt}
+	#{memberPhotoOr, jdbcType=VARCHAR},
+	#{memberPhotoSt, jdbcType=VARCHAR}
 )
 </insert>
 

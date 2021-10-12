@@ -257,6 +257,7 @@
 	
 							<div class="topbar-divider d-none d-sm-block"></div>
 							<!-- 로그인 전(로그인, 회원가입) -->
+							<h5 style="margin-top:23px;">환영합니다. ${sessionScope.memberId }님</h5>
 							<c:if test="${empty sessionScope.memberId }">
 								<ul class="navbar-nav">
 									<li class="nav-item"><a class="nav-link"

@@ -13,4 +13,5 @@ public class MemberVO {
 	private String memberPhotoSt; 	// 프로필 사진(저장)
 	private int memberCode;     	// 회원(0), 관리자(9) 나누는 코드
 	
+	
 }

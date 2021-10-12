@@ -76,9 +76,7 @@
 											<div class="invalid-feedback">핸드폰 번호를 정확하게 입력하세요.</div>
 										</div>
 										<div class="d-grid">
-											<button
-												class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
-												type="submit">JOIN!!</button>
+											<button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">JOIN!!</button>
 										</div>
 									</form>
 								</div>
