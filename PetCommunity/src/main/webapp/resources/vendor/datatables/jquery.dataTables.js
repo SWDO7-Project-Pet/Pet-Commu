@@ -11569,7 +11569,7 @@
 			 * to the information (`info`) to give an idea of how strong the filtering
 			 * is. The variable _MAX_ is dynamically updated.
 			 *  @type string
-			 *  @default (filtered from _MAX_ total entries)
+			 *  @default (총 항목 _MAX_개 에서 필터링 됨)
 			 *
 			 *  @dtopt Language
 			 *  @name DataTable.defaults.language.infoFiltered
@@ -11578,12 +11578,12 @@
 			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "language": {
-			 *          "infoFiltered": " - filtering from _MAX_ records"
+			 *          "infoFiltered": " - 총 항목 _MAX_개 에서 필터링 됨"
 			 *        }
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "(총 항목 _MAX_개 에서 필터링 됨)",
 	
 	
 			/**

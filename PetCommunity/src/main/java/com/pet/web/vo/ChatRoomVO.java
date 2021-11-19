@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ChatRoomVO {
-	private String chatroomId;
+	private int chatRoomNum; // 생성된 방 번호
+
 
 }

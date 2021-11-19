@@ -122,11 +122,76 @@
 		                        	</div>
 		                    	</div> 
 		                    	<!-- 로그인 아이디와 작성자 아이디가 다를시만 보여주기 -->
-		                    	<c:if test="${tradeBoard.memberId != sessionScope.memberId }">
-			                    	<div align="center">
-			                    		<button type="button" class="btn btn-primary" onclick="location.href='/chat'">거래 신청</button>		
-			                    	</div>     
-		                    	</c:if>               	           
+		                    	<form id="createChatRoom" action="/chat/createChatRoom" method="post">
+			                    	<c:if test="${tradeBoard.memberId != sessionScope.memberId }">
+				                    	<div align="center">
+				                    		<!-- 이 버튼을 누를 시 방을 생성하고, 생성된 채팅 방으로 이동 -->
+				                    		<button type="submit" class="btn btn-primary" onclick="location.href='/chat/chat'">거래 신청</button>		
+				                    	</div>     
+			                    	</c:if> 
+		                    	</form>  
+		                    	
+		                    	<br><br>
+		                    	
+		                    	<table class="table table-sm">
+								<c:forEach items="${tradeReplyList }" var="tradeReply">
+									<tr>
+										<th>${tradeReply.memberId }</th>
+										
+										<td id="tradeReply${tradeReply.tradeReplyNum }" style="width: 70%">
+											<c:if test="${tradeReply.csOpen eq 'N'}" >
+												<c:choose>
+													<c:when test="${tradeReply.memberId == sessionScope.memberId || sessionScope.code != null || tradeBoard.memberId == sessionScope.memberId}">
+														<span id="tradeReplyContent${tradeReply.tradeReplyNum }">${tradeReply.tradeReplyContent }</span>
+													</c:when>
+													<c:otherwise>
+														<span id="tradeReplyContent${tradeReply.tradeReplyNum }">
+														<img src="/resources/img/icon/lock.png" alt="비밀글" width="25px" height="25px" />
+														관리자와 작성자만 볼 수 있습니다.</span>
+													</c:otherwise>
+												</c:choose>																									
+											</c:if>
+											<c:if test="${tradeReply.csOpen eq 'Y'}" >
+											<span id="tradeReplyContent${tradeReply.tradeReplyNum }">${tradeReply.tradeReplyContent }</span>
+											</c:if>
+										</td>	
+												
+										<td align="right">
+											<span>
+												${tradeReply.tradeReplyIndate }
+												<!-- 자신이 작성한 글 일 시 -->
+												<c:if test="${tradeReply.memberId == sessionScope.memberId || sessionScope.code != null}">
+													<img src="/resources/img/icon/delete.png" width="20px" height="20px" alt="삭제" style="cursor:pointer;" onclick="deleteTradeReply(${tradeReply.tradeReplyNum});">
+													<img src="/resources/img/icon/modifiy.png" width="20px" height="20px" alt="수정" style="cursor:pointer;" onclick="updateReply(${tradeReply.tradeReplyNum});">
+												</c:if>
+											</span>	
+										</td>	
+									</tr>
+								</c:forEach>
+															
+								<tr>
+									<td colspan="3">
+										<form action="/tradeBoard/tradeReplyWrite" method="post">
+											<div class="mb-3">
+												<textarea class="form-control" name="tradeReplyContent" id="exampleFormControlTextarea1" rows="3" style="resize: none;"></textarea>
+											</div>
+											<div align="right">												
+											    <input type="radio" name="csOpen" id="csOpen" value="Y" class="radio" checked="checked"/><span class="ml_10">공개</span>&nbsp;&nbsp;&nbsp;&nbsp;
+											    <input type="radio" name="csOpen" id="csOpen" value="N" class="radio" /><span class="ml_10">비공개</span>&nbsp;
+
+												<c:if test="${sessionScope.memberId == null}">
+													<button type="button" class="btn btn-outline-primary" onclick="ale();">댓글 등록</button>
+												</c:if>
+												<c:if test="${sessionScope.memberId != null}">
+													<button type="submit" class="btn btn-outline-primary">댓글 등록</button>
+												</c:if>
+											</div>
+											<input type="hidden" name="tradeBoardNum" value="${tradeBoard.tradeBoardNum }">
+										</form>
+									</td>
+								</tr>
+									
+							</table>   
 		                </div>
 					
 						
@@ -193,7 +258,43 @@
 				  footer: '<a href="/member/login">로그인</a>'
 				})
 
-		}	
+		}
+		
+		// 댓글 삭제
+		function deleteTradeReply(tradeReplyNum){
+			var result = confirm("정말 삭제하시겠습니까?");
+			
+			if(result){
+				location.href = "/tradeBoard/tradeReplyDelete?tradeReplyNum=" + tradeReplyNum + "&tradeBoardNum=" + ${tradeBoard.tradeBoardNum };	
+			}
+		}
+    	
+		// 댓글 수정
+		function updateReply(tradeReplyNum){
+			var tr = document.getElementById("tradeReply" + tradeReplyNum);
+			var tradeReplyContent = document.getElementById("tradeReplyContent" + tradeReplyNum).innerHTML;
+			
+			var str = "";
+			str += "<form action='/tradeBoard/tradeReplyUpdate' method='post'>";
+			str += "	<textarea class='form-control' name='tradeReplyContent' id='exampleFormControlTextarea1' rows='3' style='resize: none;'>";
+			str += 			tradeReplyContent;
+			str += 		"</textarea>";
+			str += "	<div align='right'>" 
+			str += "		<input type='submit' value='댓글 등록' class='btn btn-outline-primary'>";
+			str += "	</div>"
+			str += "	<input type='hidden' name='tradeReplyNum' value='" + tradeReplyNum + "'>";
+			str += "	<input type='hidden' name='tradeBoardNum' value='" + ${tradeBoard.tradeBoardNum } + "'>";
+			str += "</form>";
+			
+			tr.innerHTML = str;
+		}
+		
+    </script>
+    
+    <script type="text/javascript">  
+	 	function GoChat(){
+	 		
+	 	}
     </script>
     
 </body>

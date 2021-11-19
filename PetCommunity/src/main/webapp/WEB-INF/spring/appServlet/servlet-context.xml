@@ -19,7 +19,8 @@
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/petcommunity/**" location="C:/workspace/petcommunity/" />
 	<resources mapping="/free/**" location="C:/workspace/free/" />
-	<resources mapping="/images/**" location="C:/tip/" />
+	<resources mapping="/images/**" location="C:/workspace/tip/" />
+	<resources mapping="/profilePhoto/**" location="C:/workspace/user/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -32,11 +33,11 @@
 	
 	<!-- 웹 소켓 핸들러 -->
     <websocket:handlers>
-        <websocket:mapping path="/chating" handler="socketHandler"/>
+        <websocket:mapping path="/chat" handler="socketHandler"/>
 		 <websocket:handshake-interceptors>
         	<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
         </websocket:handshake-interceptors>
-        <websocket:sockjs></websocket:sockjs> 
+        
     </websocket:handlers>
  
     <beans:bean id="socketHandler" class="com.pet.web.socket.SocketHandler"/>

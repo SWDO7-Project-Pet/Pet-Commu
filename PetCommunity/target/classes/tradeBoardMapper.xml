@@ -202,5 +202,57 @@
     		ot.trade_board_num desc
 	</select>
 	
+	<!-- 댓글 작성 -->
+	 <insert id="tradeReplyWrite" parameterType="TradeReply">
+		insert into
+		    trade_reply(
+		        trade_reply_num
+		        ,trade_reply_content
+		        ,trade_board_num
+		        ,member_id
+		        ,cs_open  
+		    ) values(
+		        trade_reply_seq.nextval
+		        ,#{tradeReplyContent}
+		        ,#{tradeBoardNum}
+		        ,#{memberId}
+		        ,#{csOpen}
+		    )
+    </insert>
+    
+    <!-- 댓글 읽기 -->
+	 <select id="readAllTradeReply" parameterType="int" resultType="TradeReply">
+	 	select
+	 		trade_reply_num as tradeReplyNum
+	 		,trade_reply_content as tradeReplyContent
+	 		,to_char(trade_reply_indate, 'yy-MM-DD HH24:MI:SS') as tradeReplyIndate
+	 		,trade_board_num as tradeBoardNum
+	 		,member_id as memberId
+	 		,cs_open as csOpen
+	 	from
+	 		trade_reply
+	 	where
+	 		trade_board_num = #{tradeBoardNum}
+	 	order by
+	 		trade_reply_indate desc
+	 </select>
+	 
+	<!-- 댓글 삭제 -->
+    <delete id="tradeReplyDelete" parameterType="int">
+	  	delete from
+	  		trade_reply
+	  	where
+	  		trade_reply_num = #{tradeReplyNum}
+	</delete>
+	
+	<!-- 댓글 수정 -->	
+    <update id="tradeReplyUpdate" parameterType="TradeReply">
+	  	update
+	  		trade_reply
+	  	set
+	  		trade_reply_content = #{tradeReplyContent}
+	  	where
+	  		trade_reply_num = #{tradeReplyNum}
+    </update>
     	 	
 </mapper>

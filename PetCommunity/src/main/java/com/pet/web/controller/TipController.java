@@ -49,7 +49,6 @@ public class TipController {
 		logger.info("model:{}",model);
 		model.addAttribute("tipList",tipList);
 		
-		
 		return"tip/tipMain";
 	}	
 	
@@ -65,26 +64,30 @@ public class TipController {
 	@RequestMapping(value="/tipAnimal",method = RequestMethod.GET)
 	public String tipAnimal(Model model,String animalKind) {
 		logger.info("tipAnimal 메소드 실행(GET)");
-		ArrayList<AnimalDataVO> animalList = service.selectAnimalData(animalKind);
-		model.addAttribute("animalList",animalList);
+				
+		if(animalKind == null) {
+			animalKind = "강아지";
+		}
 		
+		ArrayList<AnimalDataVO> animalList = service.selectAnimalData(animalKind);
+		model.addAttribute("animalList",animalList);	
 		return"tip/tipAnimal";
 	}
-	
+		
 	// tipAnimalSpecific 접속
-		@RequestMapping(value="/tipAnimalSpecific",method = RequestMethod.GET)
-		public String tipAnimalSpecific(Model model,int animalNum) {
-			logger.info("tipAnimalSpecific 메소드 실행(GET)");
-			logger.info("animalNum:{}",animalNum);
-			AnimalDataVO animal = service.getFileInfo(animalNum);
-			ArrayList<AnimalDataPhotoSaveVO> photo = service.selectPhoto(animalNum);
-			logger.info("animal:{}",animal);
-			model.addAttribute("animal",animal);
-			logger.info("photo:{}",photo);
-			model.addAttribute("photo",photo);
-			
-			return"tip/tipAnimalSpecific";
-		}
+	@RequestMapping(value="/tipAnimalSpecific",method = RequestMethod.GET)
+	public String tipAnimalSpecific(Model model,int animalNum) {
+		logger.info("tipAnimalSpecific 메소드 실행(GET)");
+		logger.info("animalNum:{}",animalNum);
+		AnimalDataVO animal = service.getFileInfo(animalNum);
+		ArrayList<AnimalDataPhotoSaveVO> photo = service.selectPhoto(animalNum);
+		logger.info("animal:{}",animal);
+		model.addAttribute("animal",animal);
+		logger.info("photo:{}",photo);
+		model.addAttribute("photo",photo);
+		
+		return"tip/tipAnimalSpecific";
+	}
 	
 	
 	//tipTest 접속
@@ -94,56 +97,56 @@ public class TipController {
 		return"tip/tipTest";
 	}
 	//writeTipAnimal 접속
-		@RequestMapping(value="/writeTipAnimal",method = RequestMethod.GET)
-		public String writeTipAnimal() {
-			logger.info("writeTipAnimal 메소드 실행(GET)");
-			return"tip/writeTipAnimal";
-		}
+	@RequestMapping(value="/writeTipAnimal",method = RequestMethod.GET)
+	public String writeTipAnimal() {
+		logger.info("writeTipAnimal 메소드 실행(GET)");
+		return"tip/writeTipAnimal";
+	}
 		
 	//writeTipAnimal 작성 기능	
-		@RequestMapping(value="/writeTipAnimal",method = RequestMethod.POST)
-		public String writeTipAnimal(HttpSession session,String animalKind,String animalVariety, String animalOutline,String animalOrigin, String animalSize,String animalHeight,String animalWeight,String animalAppearance,String animalColor,String animalPersonality,String animalPurpose,String animalDisease,String animalRecommend,MultipartFile uploadThumbNail ,MultipartHttpServletRequest uploadFile) {
-			logger.info("writeTipAnimal 메소드 실행(POST)");
-			logger.info("animalKind: {}",animalKind);
-			logger.info("animalVariety: {}",animalVariety);
-			logger.info("animalOutline: {}",animalOutline);
-			logger.info("uploadThumbNail: {}",uploadThumbNail);
-			logger.info("originalFileName: {}",uploadThumbNail.getOriginalFilename());
-			logger.info("uploadFile: {}",uploadFile);
-			
-			String animalThumbnailSt = FileService.saveFile(uploadThumbNail, "C:/workspace/tip/");
-			logger.info("저장된 파일명: {}", animalThumbnailSt);		
-			
-			String memberId = (String) session.getAttribute("memberId");
-			
-			boolean result = service.insertAnimal(animalKind,uploadThumbNail.getOriginalFilename(),animalThumbnailSt,animalVariety,animalOutline,animalOrigin,animalSize,animalHeight,animalWeight,animalAppearance,animalColor,animalPersonality,animalPurpose,animalDisease,animalRecommend,memberId);
-			String returnUrl = null;
-			if(result) {
-				logger.info("게시글 작성 성공");
-				returnUrl = "redirect:/tip/tipAnimal";
-			}else {
-				logger.info("게시글 작성 실패");
-				returnUrl = "tip/writeTipAnimal";
-			}
-			//파일 저장 시작
-			List<MultipartFile> fileList = uploadFile.getFiles("uploadFile");
-			String path = "C:/workspace/tip";
-			for(MultipartFile mf : fileList) {
-				String savedFileName = FileService.saveFile(mf, path);
-				logger.info("저장된 파일명:{}",savedFileName);
-				if(savedFileName !=null) {
-					int animalNum = service.selectAnimalNum();
-					logger.info("animalNum:{}",animalNum);
-					boolean result2 = service.uploadFile(animalNum, savedFileName, mf.getOriginalFilename());
-					if(result2) {
-						logger.info("파일 정보 저장 성공.");
-					}else {
-						logger.info("파일 정보 저장 삭제.");
-					}
+	@RequestMapping(value="/writeTipAnimal",method = RequestMethod.POST)
+	public String writeTipAnimal(HttpSession session,String animalKind,String animalVariety, String animalOutline,String animalOrigin, String animalSize,String animalHeight,String animalWeight,String animalAppearance,String animalColor,String animalPersonality,String animalPurpose,String animalDisease,String animalRecommend,MultipartFile uploadThumbNail ,MultipartHttpServletRequest uploadFile) {
+		logger.info("writeTipAnimal 메소드 실행(POST)");
+		logger.info("animalKind: {}",animalKind);
+		logger.info("animalVariety: {}",animalVariety);
+		logger.info("animalOutline: {}",animalOutline);
+		logger.info("uploadThumbNail: {}",uploadThumbNail);
+		logger.info("originalFileName: {}",uploadThumbNail.getOriginalFilename());
+		logger.info("uploadFile: {}",uploadFile);
+		
+		String animalThumbnailSt = FileService.saveFile(uploadThumbNail, "C:/workspace/tip/");
+		logger.info("저장된 파일명: {}", animalThumbnailSt);		
+		
+		String memberId = (String) session.getAttribute("memberId");
+		
+		boolean result = service.insertAnimal(animalKind,uploadThumbNail.getOriginalFilename(),animalThumbnailSt,animalVariety,animalOutline,animalOrigin,animalSize,animalHeight,animalWeight,animalAppearance,animalColor,animalPersonality,animalPurpose,animalDisease,animalRecommend,memberId);
+		String returnUrl = null;
+		if(result) {
+			logger.info("게시글 작성 성공");
+			returnUrl = "redirect:/tip/tipAnimal";
+		}else {
+			logger.info("게시글 작성 실패");
+			returnUrl = "tip/writeTipAnimal";
+		}
+		//파일 저장 시작
+		List<MultipartFile> fileList = uploadFile.getFiles("uploadFile");
+		String path = "C:/workspace/tip/";
+		for(MultipartFile mf : fileList) {
+			String savedFileName = FileService.saveFile(mf, path);
+			logger.info("저장된 파일명:{}",savedFileName);
+			if(savedFileName !=null) {
+				int animalNum = service.selectAnimalNum();
+				logger.info("animalNum:{}",animalNum);
+				boolean result2 = service.uploadFile(animalNum, savedFileName, mf.getOriginalFilename());
+				if(result2) {
+					logger.info("파일 정보 저장 성공.");
+				}else {
+					logger.info("파일 정보 저장 삭제.");
 				}
-			}						
-			return returnUrl;									
-		}		
+			}
+		}						
+		return returnUrl;									
+	}		
 			
 		//updateAnimal 실행
 		@RequestMapping(value="/updateAnimal",method = RequestMethod.POST)

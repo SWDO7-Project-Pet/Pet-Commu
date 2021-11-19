@@ -34,6 +34,7 @@ import com.pet.web.util.FileService;
 import com.pet.web.util.PageNavigator;
 import com.pet.web.vo.TradeBoardSaveVO;
 import com.pet.web.vo.TradeBoardVO;
+import com.pet.web.vo.TradeReplyVO;
 
 //거래게시판 컨트롤러
 @Controller
@@ -293,6 +294,11 @@ public class TradeBoardController {
 		logger.info("tradeBoard: {}", tradeBoard);
 		model.addAttribute("tradeBoard", tradeBoard);	
 		
+		// 댓글 보기
+		ArrayList<TradeReplyVO> tradeReplyList = service.readAllTradeReply(tradeBoardNum);
+		logger.info("tradeReplyList : {}", tradeReplyList);
+	    model.addAttribute("tradeReplyList", tradeReplyList);
+		
 		// tradePhotoList = 이 글의 본문 사진정보가 들어있는 List
 		ArrayList<TradeBoardSaveVO> tradePhotoList = service.getFileInfo(tradeBoardNum);
 		model.addAttribute("tradePhotoList", tradePhotoList);
@@ -484,7 +490,63 @@ public class TradeBoardController {
 		
 		return a;
 	}
-
 	
+	// 거래게시판 댓글 작성
+	@RequestMapping(value = "/tradeReplyWrite", method = RequestMethod.POST)
+	public String tradeReplyWrite(int tradeBoardNum, String tradeReplyContent, HttpSession session, String csOpen) {
+		logger.info("tradeReplyWrite 메소드 실행(POST)");
+		String memberId = (String) session.getAttribute("memberId");
+		
+		// 댓글 작성
+		boolean result = service.tradeReplyWrite(tradeBoardNum, memberId, tradeReplyContent, csOpen);
+		
+		if(result) {
+			logger.info("댓글 작성 성공");
+		} else {
+			logger.info("댓글 작성 실패");
+		}
+		
+		return "redirect:/tradeBoard/tradeBoardRead?tradeBoardNum=" + tradeBoardNum;
+	}		
+
+	// 거래게시판 댓글 삭제
+	@RequestMapping(value="/tradeReplyDelete", method = RequestMethod.GET)
+	public String tradeReplyDelete(int tradeReplyNum, int tradeBoardNum) {
+		logger.info("tradeReplyDelete 메소드 실행(GET)");
+		
+		logger.info("tradeReplyNum: {}", tradeReplyNum);
+		logger.info("tradeBoardNum: {}", tradeBoardNum);
+		
+		// 댓글 삭제
+		boolean result = service.tradeReplyDelete(tradeReplyNum);
+		
+		if(result) {
+			logger.info("댓글 삭제 성공");
+		} else {
+			logger.info("댓글 삭제 실패");
+		}
+		
+		return "redirect:/tradeBoard/tradeBoardRead?tradeBoardNum=" + tradeBoardNum;
+	}
+	
+	// 거래게시판 댓글 수정
+	@RequestMapping(value="/tradeReplyUpdate", method = RequestMethod.POST)
+	public String tradeReplyUpdate(String tradeReplyContent, int tradeReplyNum, int tradeBoardNum) {
+		logger.info("tradeReplyUpdate 메소드 실행(POST)");
+		
+		logger.info("tradeReplyContent : {}", tradeReplyContent);
+		logger.info("tradeReplyNum : {}", tradeReplyNum);
+		logger.info("tradeBoardNum : {}", tradeBoardNum);
+		
+		boolean result = service.tradeReplyUpdate(tradeReplyContent, tradeReplyNum);
+		
+		if(result)
+			logger.info("댓글 수정 성공");
+		else
+			logger.info("댓글 수정 실패");
+				
+				
+		return "redirect:/tradeBoard/tradeBoardRead?tradeBoardNum=" + tradeBoardNum;
+	}
 	
 }

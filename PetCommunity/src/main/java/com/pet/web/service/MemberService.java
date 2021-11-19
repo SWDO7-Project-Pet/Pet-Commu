@@ -12,24 +12,8 @@ import com.pet.web.vo.MemberVO;
 @Service
 public class MemberService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
 	@Autowired
 	private MemberDAO dao;
-
-	public boolean join(String memberId, String memberPw, String memberNames, String memberBirth, String memberPhone,
-			String saveFileName, String originalFilename) {
-		MemberVO joinMember = new MemberVO();
-		joinMember.setMemberId(memberId);
-		joinMember.setMemberPw(memberPw);
-		joinMember.setMemberNames(memberNames);
-		joinMember.setMemberBirth(memberBirth);
-		joinMember.setMemberPhone(memberPhone);
-		joinMember.setMemberPhotoOr(originalFilename);
-		joinMember.setMemberPhotoSt(saveFileName);
-		
-		return dao.join(joinMember) > 0 ? true : false;
-	}
 
 	public MemberVO login(String memberId, String memberPw) {
 		MemberVO  loginMember = new MemberVO();
@@ -60,6 +44,19 @@ public class MemberService {
 		updateMember.setMemberPhotoSt(saveFileName);
 		
 		return dao.updateMember(updateMember) > 0 ? true : false;
+	}
+
+	public boolean join(String memberId, String memberPw, String memberNames, String memberBirth, String memberPhone,
+			String saveFileName, String originalFilename) {
+		MemberVO joinMember = new MemberVO();
+		joinMember.setMemberId(memberId);
+		joinMember.setMemberPw(memberPw);
+		joinMember.setMemberNames(memberNames);
+		joinMember.setMemberBirth(memberBirth);
+		joinMember.setMemberPhone(memberPhone);
+		joinMember.setMemberPhotoSt(saveFileName);
+		joinMember.setMemberPhotoOr(originalFilename);
+		return dao.join(joinMember) > 0 ? true : false;
 	}
 
 	

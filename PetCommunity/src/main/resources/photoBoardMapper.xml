@@ -272,7 +272,7 @@ insert into photo_hashtag(
 	select
 	    photo_reply_num as photoReplyNum
 	    ,photo_reply_content as photoReplyContent
-	    ,to_char(photo_reply_indate,'yy/MM/DD') as photoReplyIndate
+	    ,to_char(photo_reply_indate,'yy/MM/DD HH24:MI:SS') as photoReplyIndate
 	    ,photo_board_num as photoBoardNum
 	    ,member_id as memberId
 	from

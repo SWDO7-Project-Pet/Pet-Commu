@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.pet.web.vo.TradeBoardSaveVO;
 import com.pet.web.vo.TradeBoardVO;
+import com.pet.web.vo.TradeReplyVO;
 
 public interface TradeBoardMapper {
 
@@ -36,6 +37,15 @@ public interface TradeBoardMapper {
 	// 페이징 글 출력
 	//ArrayList<HashMap<String, Object>> getBoardList(HashMap<String, Integer> map);
 	ArrayList<TradeBoardVO> getBoardList(TradeBoardVO tb);
+	
+	// 댓글 작성
+	int tradeReplyWrite(TradeReplyVO newReply);
+	// 댓글 보기
+	ArrayList<TradeReplyVO> readAllTradeReply(int tradeBoardNum);
+	// 댓글 삭제
+	int tradeReplyDelete(int tradeReplyNum);
+	// 댓글 수정
+	int tradeReplyUpdate(TradeReplyVO reply);
 
 
 }

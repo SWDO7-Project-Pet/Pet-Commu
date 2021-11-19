@@ -37,7 +37,7 @@
 		<form method="POST" action="/member/login" class="needs-validation" novalidate>
 			<img class="mb-4" src="/resources/img/logo.png"
 				alt="" width="72" height="72">
-			<h1 class="h3 mb-3 fw-normal">WELCOME BACK!!</h1>
+			<h1 class="h3 mb-3 fw-normal">GBG</h1>
 
 			<div class="form-floating">
 				<input type="text" class="form-control" id="floatingInput" name="memberId" required
@@ -55,8 +55,8 @@
 			</div>
 			<c:if test="${msg == false}">
 					<p style="color:#f00;">로그인에 실패했습니다. 아이디 또는 비밀번호를 다시 입력하세요.</p>
-				</c:if>
-			<button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+			</c:if>
+			<button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
 			
 			<p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
 		</form>

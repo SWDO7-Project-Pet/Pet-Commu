@@ -76,7 +76,7 @@
 							<c:forEach items="${photoBoardSaveList }" var="photoBoardSaveList">
 								<c:if test="${pBoard.photoBoardNum == photoBoardSaveList.photoboardNum}">
 								   <div class="carousel-item">
-							    	   <img src="/petcommunity/${photoBoardSaveList.photoBoardPhotoSt }" style="height: 800px;width: 500px">
+							    	   <img src="/petcommunity/${photoBoardSaveList.photoBoardPhotoSt }" style="height: 800px; width: 500px">
 							   	   </div>
 								</c:if>
 							</c:forEach>
@@ -84,8 +84,8 @@
 						</div>
 						
 					  	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-					    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					    <span class="sr-only">Previous</span>
+						    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						    <span class="sr-only">Previous</span>
 					  	</a>
 						<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
 						    <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -98,9 +98,11 @@
 					<div class="title-area">
 		
 						<!-- 모달창 내용부분 -->					
-						<h1>${pBoard.memberId }</h1>
+						<h3>${pBoard.photoBoardTitle }</h3>
+						<div class="text-right">${pBoard.memberId }</div>
+						<hr class="sidebar-divider">
 						<p>${pBoard.photoBoardContent }</p>
-						
+						<hr class="sidebar-divider">
 						<!-- ajax로 댓글리스트랑 작성하는 부분 보여줄려고햇던 부분 
 						<form action="" method="post" id="replyTable" class = "table table-striped">
 						</form>						
@@ -108,15 +110,17 @@
 						</form> -->
 						
 						<!-- 모달창내용에서 댓글창보여주는부분 -->
-						<table id="replyTable">
+						<%-- <table id="replyTable" border="1">
 						  <c:forEach items="${photoReplyList }" var="photoReplyList">
+						  
 						  <c:if test="${pBoard.photoBoardNum == photoReplyList.photoBoardNum}">
 							<tr id="oneRowReply${photoReplyList.photoReplyNum }">
 								<th>${photoReplyList.memberId }</th>
 								<td id="pReply${photoReplyList.photoReplyNum }">
 									<span id= "photoReplyContent${photoReplyList.photoReplyNum }">${photoReplyList.photoReplyContent }</span>
 								</td>
-								<td>${photoReplyList.photoReplyIndate }
+								<td>${photoReplyList.photoReplyIndate }</td>
+								<td>	
 									<c:if test="${photoReplyList.memberId == sessionScope.memberId }">
 										<input type="button" value="수정" 
 											onclick="upupReply(${photoReplyList.photoReplyNum },${photoReplyList.photoBoardNum });" class="btn btn-secondary btn-sm">
@@ -125,13 +129,47 @@
 								</td>
 						  	 </tr>
 						  	 </c:if>
-						 </c:forEach>
-					   </table>
+						 </c:forEach>					 
+					   </table> --%>
 					   
+					   
+						  <c:forEach items="${photoReplyList }" var="photoReplyList">						  
+							  <c:if test="${pBoard.photoBoardNum == photoReplyList.photoBoardNum}">
+								<div id="oneRowReply${photoReplyList.photoReplyNum }">
+									<h5>${photoReplyList.memberId }</h5>								
+									<br>
+									<div id="pReply${photoReplyList.photoReplyNum }">
+										<span id= "photoReplyContent${photoReplyList.photoReplyNum }">${photoReplyList.photoReplyContent }</span>
+									</div>
+									<div class="text-right">${photoReplyList.photoReplyIndate }</div>
+									<div>	
+										<c:if test="${photoReplyList.memberId == sessionScope.memberId || sessionScope.code != null}">
+											<input type="button" value="수정" 
+												onclick="upupReply(${photoReplyList.photoReplyNum },${photoReplyList.photoBoardNum });" class="btn btn-secondary btn-sm">
+											<input type="button" value="삭제" onclick="deleteReply(${photoReplyList.photoReplyNum },${photoReplyList.photoBoardNum });" class="btn btn-secondary btn-sm">
+										</c:if>
+									</div>
+							  	 </div>
+							  	 <hr class="sidebar-divider">
+							  </c:if>
+						 </c:forEach>					 
+					   					   
 					   <form action="/photoBoard/photoBoardReplyWrite" method="post">
-							<textarea name="photoReplyContent" style="width:150px; resize:none;" placeholder="댓글을 입력하세요" rows="1"></textarea>
-							
-							<input type="submit" id="writeReply" value="등록" onclick="writeReply(${pBoard.photoBoardNum });">
+							<%-- <textarea name="photoReplyContent" class="" style="width:150px; resize:none;" placeholder="댓글을 입력하세요" rows="1"></textarea>						
+							<input type="submit" id="writeReply" value="등록" onclick="writeReply(${pBoard.photoBoardNum });"> --%>
+						
+						<!-- 댓글 등록 -->
+						<div class="form-row align-items-center">
+							<div class="col-auto my-1">				     
+						        <!-- <input type="text" class="form-control" id="validationTooltip02" placeholder="검색어 입력.." name="searchWord"
+						         style="width: 150px">	 -->
+						         <textarea name="photoReplyContent" class="form-control" id="validationTooltip02" placeholder="댓글을 입력하세요"></textarea>    				      
+						    </div>
+						    <div class="col-auto my-1">
+						      <input type="submit" id="writeReply" class="btn btn-primary" value="등록" onclick="writeReply(${pBoard.photoBoardNum });">
+						    </div>
+					    </div>
+					    
 							<input type="hidden" name="photoBoardNum" value="${pBoard.photoBoardNum }">
 					   </form>
 						
@@ -143,14 +181,17 @@
 				    
             <!-- 사진 게시판 화면 --> 
             <div class="container">
-												   <!-- 글쓰기 버튼 -->
+			  <!-- 글쓰기 버튼 -->
 			  <h1>사진 게시판</h1><div align="right"><a href="/photoBoard/photoBoardWrite" class="btn btn-primary">글쓰기</a></div>
+			  <hr>
 			  <div class="card-columns">			
 		   
 				    <!-- 게시물 전체 list for문 -->
 				    <c:forEach items="${photoBoardList }" var="pBoard">
 					    <div class="card">
-					      <div class="card-header">${pBoard.memberId }
+					      <div class="card-header">
+					      	${pBoard.memberId }
+					      	
 					      </div>	
 					      
 					        <!-- 썸넬이미지 보여주기부분 -->
@@ -159,17 +200,16 @@
 					      
 					      
 					      <div class="card-body">
-					 
-					        <h6 class="card-title">${pBoard.photoBoardTitle }</h6>
-					        
-							<!-- 게시물에해당하는 해시태그보여주기부분 -->
+					 		<!-- 게시물에해당하는 해시태그보여주기부분 -->
 					        <c:forEach items="${photoHashtagList }" var="photoHashtagList">
 					        <c:if test="${pBoard.photoBoardNum == photoHashtagList.photoBoardNum}">
-					        <input type="button" class="btn btn-primary" value="${photoHashtagList.hashtag }">					        
+					        <input type="button" class="btn btn-info btn-sm" value="${photoHashtagList.hashtag }"
+					        style="font-size: 1px;">					        
 					        </c:if>
 					        </c:forEach>
 					        
-					        <br>
+					        <h5 class="card-title">${pBoard.photoBoardTitle }</h5>
+					           
 					        <!--  좋아요보여주기부분 -->
 					        <c:forEach items="${photoLikesList }" var="photoLikes">					        
 					  		<c:if test="${photoLikes.PHOTO_BOARD_NUM == pBoard.photoBoardNum }">
@@ -192,7 +232,7 @@
 					  		<c:set var="flag" value="0"></c:set>
 					  	 
 					  	 	<!-- 자신이 쓴글이면 수정 삭제 표시 -->
-					  	    <c:if test="${sessionScope.memberId == pBoard.memberId }">
+					  	    <c:if test="${sessionScope.memberId == pBoard.memberId || sessionScope.code != null}">
 						  	  <br>
 						      <div class="btn float-right"><a href="/photoBoard/photoBoardUpdate?photoBoardNum=${pBoard.photoBoardNum }" class="btn btn-primary btn-sm">수정</a>
 						      <a href="/photoBoard/photoBoardDelete?photoBoardNum=${pBoard.photoBoardNum }" class="btn btn-secondary btn-sm">삭제</a></div>
@@ -310,7 +350,7 @@
 			/* 모달펑션 실행하고 댓글리스트 보여주는 getlist실행 하지만 안됨 */
 			function photoModal(photoBoardNum) {
 			  $("#open-mikes-modal"+photoBoardNum).click(function(e) {
-				  alert("모달 펑션실행"+photoBoardNum);
+				  
 			    e.preventDefault();
 			    $("#myModal"+photoBoardNum).mikesModal();
 			    

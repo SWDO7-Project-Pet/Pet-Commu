@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pet.web.dao.TradeBoardDAO;
+import com.pet.web.vo.FreeReplyVO;
 import com.pet.web.vo.TradeBoardSaveVO;
 import com.pet.web.vo.TradeBoardVO;
+import com.pet.web.vo.TradeReplyVO;
 
 @Service
 public class TradeBoardService {
@@ -118,6 +120,47 @@ public class TradeBoardService {
 
 	public ArrayList<TradeBoardVO> getBoardList(TradeBoardVO tb) {
 		return dao.getBoardList(tb);
+	}
+
+	// 거래게시판 댓글 작성
+	public boolean tradeReplyWrite(int tradeBoardNum, String memberId, String tradeReplyContent, String csOpen) {
+		TradeReplyVO newReply = new TradeReplyVO();
+		newReply.setTradeBoardNum(tradeBoardNum);
+		newReply.setMemberId(memberId);
+		newReply.setTradeReplyContent(tradeReplyContent);
+		newReply.setCsOpen(csOpen);
+		
+		int result = dao.tradeReplyWrite(newReply);
+		if(result > 0)
+			return true;
+		else
+			return false;
+	}
+
+	// 전체 댓글 보기
+	public ArrayList<TradeReplyVO> readAllTradeReply(int tradeBoardNum) {
+		return dao.readAllTradeReply(tradeBoardNum);
+	}
+
+	// 댓글 삭제
+	public boolean tradeReplyDelete(int tradeReplyNum) {
+		if(dao.tradeReplyDelete(tradeReplyNum) > 0) 
+			return true;
+		else
+			return false;
+	}
+
+	// 댓글 수정
+	public boolean tradeReplyUpdate(String tradeReplyContent, int tradeReplyNum) {
+		TradeReplyVO reply = new TradeReplyVO();
+		
+		reply.setTradeReplyContent(tradeReplyContent);
+		reply.setTradeReplyNum(tradeReplyNum);
+	
+		if(dao.tradeReplyUpdate(reply) > 0)
+			return true;
+		else
+			return false;
 	}
 
 	// 페이징 글 출력

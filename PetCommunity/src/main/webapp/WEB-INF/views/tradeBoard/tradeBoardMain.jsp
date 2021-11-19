@@ -54,7 +54,7 @@
 
        
              <!-- ☆☆☆☆☆☆☆☆ 메인화면 ☆☆☆☆☆☆☆☆ -->   
-            <!-- 사진 게시판 화면 --> 
+            <!-- 거래 게시판 화면 --> 
             <div class="container">
 			  <input type="button" style="float:right;" class="btn btn-primary" value="글쓰기" onclick="location.href='tradeBoardWrite'">
 			  <h1 class="h3 mb-2 text-gray-800"><span onclick="location.href='tradeBoardMain'" style="cursor:pointer;">거래 게시판</span></h1>
@@ -159,7 +159,6 @@
 	    //현재 페이지가 로딩중인지 여부를 저장할 변수이다.
 	    let isLoading=false;
 	    
-	   
 	    //웹브라우저의 창을 스크롤 할 때 마다 호출되는 함수 등록
 	    $(window).on("scroll",function(){
 	        //위로 스크롤된 길이
@@ -191,7 +190,6 @@
 	    const GetList = function(currentPage){
 	        console.log("inGetList"+currentPage);
 	        
-
 	        // 무한 스크롤
 	        $.ajax({
 	            url:"ajax_page.do",
@@ -209,8 +207,7 @@
 	                //로딩중이 아니라고 표시한다.
 	                isLoading=false;
 	                console.log("ajax");
-	                
-	                
+	                               
 	            }
 	        });
 	    }

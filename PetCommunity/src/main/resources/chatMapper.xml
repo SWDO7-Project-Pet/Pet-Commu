@@ -3,6 +3,26 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pet.web.dao.ChatMapper">
+
 	
+	<!-- 거래 신청을 누르면 방 생성 -->
+	<insert id="createChatRoom" parameterType="ChatRoom">
+		insert into
+			chat_room(
+				chat_room_num
+			) values(
+				chat_room_seq.nextval
+			)
+	</insert>
+	
+	<!-- 채팅방 찾기 -->
+	<select id="selectChatRoom" parameterType="int" resultType="int">
+		select
+			chat_room_num
+		from
+			chat_room
+		where
+			chat_room_num = #{chatRoomNum}
+	</select>
 	
 </mapper>

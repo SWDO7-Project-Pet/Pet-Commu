@@ -91,6 +91,7 @@ public class FreeBoardService {
 	}
 
 
+	// 댓글 삭제
 	public boolean freeReplyDelete(int freeReplyNum) {
 		if(dao.freeReplyDelete(freeReplyNum) > 0) 
 			return true;
@@ -98,7 +99,7 @@ public class FreeBoardService {
 			return false;
 	}
 
-
+	// 댓글 수정
 	public boolean freeReplyUpdate(String freeReplyContent, int freeReplyNum) {
 		FreeReplyVO reply = new FreeReplyVO();
 		
@@ -109,7 +110,6 @@ public class FreeBoardService {
 			return true;
 		else
 			return false;
-
 	}
 
 	// 좋아요 누른 글, 아이디 저장

@@ -2936,7 +2936,7 @@ fieldset:disabled a.btn {
 
 .btn-sm, .btn-group-sm > .btn {
   padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.5rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
@@ -10495,6 +10495,7 @@ a:focus {
 
 .sidebar .sidebar-card .sidebar-card-illustration {
   height: 3rem;
+
   display: block;
 }
 

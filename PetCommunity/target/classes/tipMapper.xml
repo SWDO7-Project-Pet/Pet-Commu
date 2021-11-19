@@ -5,14 +5,16 @@
 <mapper namespace="com.pet.web.dao.TipMapper">
 
    <select id="selectTip" resultType="Tip">
-   select   
-      tip_num as tipNum
-      ,tip_title as tipTitle
-      ,tip_content as tipContent
-      ,tip_indate as tipIndate
-      ,member_id as memberId
-   from
-      tip
+	   select   
+	      tip_num as tipNum
+	      ,tip_title as tipTitle
+	      ,tip_content as tipContent
+	      ,tip_indate as tipIndate
+	      ,member_id as memberId
+	   from
+	      tip
+  	   order by
+  	   	  tip_num desc 
    </select>
    
     <insert id="insertTip" parameterType="Tip">
@@ -181,9 +183,9 @@
    	,animal_recommend as animalRecommend
    	,member_id as memberId
  	from
- 	 animal_data
+ 	 	animal_data
  	where
- 	 animal_num = #{animalNum }
+ 		animal_num = #{animalNum }
  	</select>
  	
  	<select id="selectPhoto" parameterType="int" resultType="AnimalPhotoSave">

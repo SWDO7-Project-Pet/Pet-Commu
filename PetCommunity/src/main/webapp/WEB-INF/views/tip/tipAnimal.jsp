@@ -13,17 +13,17 @@
 	    <title>동물백과</title>
 	
 	    <!-- Custom fonts for this template -->
-	    <link href="../resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	    <link href="/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 	    <link
 	        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	        rel="stylesheet">
 	
 	    <!-- Custom styles for this template -->
-	    <link href="../resources/css/sb-admin-2.min.css" rel="stylesheet">
-	    <link href="../resources/css/sb-admin-2.css" rel="stylesheet">
+	    <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
+	    <link href="/resources/css/sb-admin-2.css" rel="stylesheet">
 	
 	    <!-- Custom styles for this page -->
-	    <link href="../resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	    <link href="/resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 	    
 	    <style type="text/css">
 		 form{display:inline}
@@ -44,7 +44,10 @@
 
                     <!-- 동물백과 데이터 부분 --> 
                     
-                    <p><a href="/tip/writeTipAnimal">글 작성하기</a></p>                                                                                                                                                                                                                                                                                                                                                                        	 
+                    <c:if test="${sessionScope.code != null}">
+                    	<p><a href="/tip/writeTipAnimal">글 작성하기</a></p>
+                    </c:if>
+                                                                                                                                                                                                                                                                                                                                                                                                          	 
                      <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary"></h6>
@@ -52,11 +55,12 @@
                         <div class="card-body">
                             <div class="table-responsive">
                             	<span>
-                            		<input type="button" value="강아지" id="dog" onclick="location.href='/tip/tipAnimal?animalKind=강아지';">
+                            		<input type="button" value="강아지" id="dog" class="btn btn-primary" onclick="location.href='/tip/tipAnimal?animalKind=강아지';">
                             	</span>                           	
                             	<span>
-                            		<input type="button" value="고양이" id="cat" onclick="location.href='/tip/tipAnimal?animalKind=고양이';">
-                            	</span>                           	
+                            		<input type="button" value="고양이" id="cat" class="btn btn-primary" onclick="location.href='/tip/tipAnimal?animalKind=고양이';">
+                            	</span>  
+                            	<hr>                         	
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
@@ -64,12 +68,7 @@
                                             <th>동물 품종/설명</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>동물 사진</th>
-                                            <th>동물 품종/설명</th>
-                                        </tr>
-                                    </tfoot>
+                                   
                                     <tbody>
                                     	 <c:forEach items="${animalList }" var="List">           
                                     		 <tr>                         		
@@ -79,11 +78,15 @@
                                     				<a href="/tip/tipAnimalSpecific?animalNum=${List.animalNum }">${List.animalVariety }</a>                                    				
                                     				<form action="/tip/deleteAnimal" method="get">
 													<input type="hidden" id="animalNum" name="animalNum" value="${List.animalNum }">
-													<button type="submit" class="btn btn-primary btn-sm">삭제</button>
+													<c:if test="${sessionScope.code != null}">
+													<button type="submit" class="btn btn-primary">삭제</button>
+													</c:if>
 													</form>
 													<form action="/tip/updateAnimal" method="get">
 													<input type="hidden" id="animalNum" name="animalNum" value="${List.animalNum }">
-													<button type="submit" class="btn btn-primary btn-sm">수정</button>
+													<c:if test="${sessionScope.code != null}">
+													<button type="submit" class="btn btn-primary">수정</button>
+													</c:if>
 													</form>
 													</div>
                                     			</td>                                    			                               
@@ -132,21 +135,17 @@
 
 
     <!-- Bootstrap core JavaScript-->
-    <script src="/resources/vendor/jquery/jquery.min.js"></script>
-    <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+   <!--  <script src="/resources/vendor/jquery/jquery.min.js"></script>
+    <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
 
     <!-- Core plugin JavaScript-->
-    <script src="/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+
 
     <!-- Custom scripts for all pages-->
-    <script src="/resources/js/sb-admin-2.min.js"></script>
+    
 
-    <!-- Page level plugins -->
-    <script src="/resources/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="/resources/js/demo/datatables-demo.js"></script>
+ 
 	
 	
 	

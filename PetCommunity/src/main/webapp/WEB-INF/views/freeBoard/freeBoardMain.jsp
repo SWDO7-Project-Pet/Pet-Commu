@@ -76,7 +76,8 @@
 		                                            	<div id="hashtags">                                            		                                            		
 			                                            		 <c:forEach items="${allHash }" var="ah">
 			                                            			<c:if test="${freeBoard.freeBoardNum == ah.freeBoardNum}">
-																		<input type="submit" class="btn btn-info btn-sm" name="searchTag" value="${ah.hashTag }">																	
+																		<input type="submit" class="btn btn-info btn-sm" name="searchTag" value="${ah.hashTag }"
+																		style="font-size: 1px;">																	
 																	</c:if>
 																</c:forEach> 														
 		                                            	</div>	                                            		

@@ -52,13 +52,12 @@ public class HomeController {
 		return "home";
 	}
 	 
-	@RequestMapping("/chat")
-	public ModelAndView chat() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("chat");
-		return mv;
-	}
-	
+//	@RequestMapping("/chat")
+//	public ModelAndView chat() {
+//		ModelAndView mv = new ModelAndView();
+//		mv.setViewName("chat");
+//		return mv;
+//	}
 	
 	
 	

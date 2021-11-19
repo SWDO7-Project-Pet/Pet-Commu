@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+ 
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,20 +11,18 @@
 <body>
 	<!-- Page Wrapper -->
 		<div id="wrapper">
-	
-			<!-- Sidebar (메뉴바(왼쪽)) -->
+		
+			<!-- Sidebar (메뉴바(왼쪽))  -->
 			<ul
-				class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
-				id="accordionSidebar">
+				class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color:#d7c474;">
 	
 				<!-- Sidebar - Brand (타이틀 로고)-->
 				<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-					<div class="sidebar-brand-icon rotate-n-15">
-						
+					<div class="sidebar-brand-icon rotate-n-15">					
 						<img src="/resources/img/logo.png" style="width: 50px;height: 50px">
 					</div>
 					<div class="sidebar-brand-text mx-3">
-						사이트 이름
+						GBG
 					</div>
 				</a>
 	
@@ -80,13 +80,11 @@
 					<button class="rounded-circle border-0" id="sidebarToggle"></button>
 				</div>
 	
-				<!-- Sidebar Message -->
+				<!-- Sidebar Message(광고) -->
 				<div class="sidebar-card d-none d-lg-flex">
-					<img class="sidebar-card-illustration mb-2" src="/resources/img/banner/ad.png" alt="...">
-					<p>여기에 광고</p>
+					<img class="sidebar-card-illustration mb-3" src="/resources/img/partyMix.jpg">
 					<a class="btn btn-success btn-sm"
-						href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to
-						Pro!</a>
+						href="https://www.coupang.com/np/search?q=%EA%B3%A0%EC%96%91%EC%9D%B4+%ED%8C%8C%ED%8B%B0%EB%AF%B9%EC%8A%A4&channel=relate">사러가기</a>
 				</div>
 	
 			</ul>
@@ -135,19 +133,21 @@
 								<div
 									class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
 									aria-labelledby="searchDropdown">
-									<form class="form-inline mr-auto w-100 navbar-search">
+									
+									<form class="form-inline mr-auto w-100 navbar-search">									
 										<div class="input-group">
 											<input type="text"
 												class="form-control bg-light border-0 small"
-												placeholder="검색어 입력" aria-label="Search"
-												aria-describedby="basic-addon2">
+												placeholder="검색어 입력..." aria-label="Search"
+												aria-describedby="basic-addon2" id="fullsearch">
 											<div class="input-group-append">
 												<button class="btn btn-primary" type="button">
 													<i class="fas fa-search fa-sm"></i>
-												</button>
+												</button>											
 											</div>
 										</div>
 									</form>
+									
 								</div></li>
 	
 							<!-- Nav Item - Alerts -->
@@ -194,68 +194,36 @@
 								</div></li>
 	
 							<!-- Nav Item - Messages -->
-							<li class="nav-item dropdown no-arrow mx-1"><a
-								class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
+							<li class="nav-item dropdown no-arrow mx-1">
+							<a class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
 								role="button" data-toggle="dropdown" aria-haspopup="true"
 								aria-expanded="false"> <i class="fas fa-envelope fa-fw"></i>
-									<!-- Counter - Messages --> <span
-									class="badge badge-danger badge-counter">7</span>
-							</a> <!-- Dropdown - Messages -->
+									<!-- 온 메세지 개수 --> 
+									<!-- <span class="badge badge-danger badge-counter">1</span> -->
+							</a> 
+							<!-- Dropdown - Messages -->
 								<div
 									class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
 									aria-labelledby="messagesDropdown">
-									<h6 class="dropdown-header">Message Center</h6>
+									<h6 class="dropdown-header">메세지</h6>
 									<a class="dropdown-item d-flex align-items-center" href="#">
 										<div class="dropdown-list-image mr-3">
 											<img class="rounded-circle"
-												src="/resources/img/undraw_profile_1.svg" alt="...">
-											<div class="status-indicator bg-success"></div>
-										</div>
-										<div class="font-weight-bold">
-											<div class="text-truncate">Hi there! I am wondering if
-												you can help me with a problem I've been having.</div>
-											<div class="small text-gray-500">Emily Fowler · 58m</div>
-										</div>
-									</a> <a class="dropdown-item d-flex align-items-center" href="#">
-										<div class="dropdown-list-image mr-3">
-											<img class="rounded-circle"
-												src="/resources/img/undraw_profile_2.svg" alt="...">
-											<div class="status-indicator"></div>
+												src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="...">
 										</div>
 										<div>
-											<div class="text-truncate">I have the photos that you
-												ordered last month, how would you like them sent to you?</div>
-											<div class="small text-gray-500">Jae Chun · 1d</div>
-										</div>
-									</a> <a class="dropdown-item d-flex align-items-center" href="#">
-										<div class="dropdown-list-image mr-3">
-											<img class="rounded-circle"
-												src="/resources/img/undraw_profile_3.svg" alt="...">
-											<div class="status-indicator bg-warning"></div>
-										</div>
-										<div>
-											<div class="text-truncate">Last month's report looks
-												great, I am very happy with the progress so far, keep up the
-												good work!</div>
-											<div class="small text-gray-500">Morgan Alvarez · 2d</div>
-										</div>
-									</a> <a class="dropdown-item d-flex align-items-center" href="#">
-										<div class="dropdown-list-image mr-3">
-											<img class="rounded-circle"
-												src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="...">
-											<div class="status-indicator bg-success"></div>
-										</div>
-										<div>
-											<div class="text-truncate">Am I a good boy? The reason I
-												ask is because someone told me that people say this to all
-												dogs, even if they aren't good...</div>
-											<div class="small text-gray-500">Chicken the Dog · 2w</div>
+											<div class="text-truncate">안녕하세요 ~ 강아지 옷 구매 가능한가요??</div>
 										</div>
 									</a> <a class="dropdown-item text-center small text-gray-500"
 										href="#">Read More Messages</a>
 								</div></li>
 	
 							<div class="topbar-divider d-none d-sm-block"></div>
+							
+							
+							<c:if test="${not empty sessionScope.memberId }">
+								<h5 style="margin-top:23px;">${sessionScope.memberId }님</h5>
+							</c:if>
 							<!-- 로그인 전(로그인, 회원가입) -->
 							<c:if test="${empty sessionScope.memberId }">
 								<ul class="navbar-nav">
@@ -270,23 +238,29 @@
 								<li class="nav-item dropdown no-arrow">
 								<a class="nav-link dropdown-toggle" href="#" id="userDropdown"
 									role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false"> <span
-										class="mr-2 d-none d-lg-inline text-gray-600 small"></span> <img
-										class="img-profile rounded-circle"
-										src="/resources/img/logo.png">
+									aria-expanded="false"> 
+									<span
+										class="mr-2 d-none d-lg-inline text-gray-600 small">
+									</span>
+									<c:if test="${memberPhoto != null}">
+										<img class="img-profile rounded-circle" src="/profilePhoto/${memberPhoto }">
+									</c:if>								
+									<c:if test="${memberPhoto == null}">
+										<img class="img-profile rounded-circle" src="/resources/img/icon/basic_profile.png">
+									</c:if>
 								</a>
 									<div
 										class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
 										aria-labelledby="userDropdown">
 										<a class="dropdown-item" href="/member/setting"> <i
 											class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-											Setting
+											회원정보
 										</a>
 										<div class="dropdown-divider"></div>
 										<a class="dropdown-item" href="#" data-toggle="modal"
 											data-target="#logoutModal"> <i
 											class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-											Logout
+											로그아웃
 										</a>
 									</div></li>
 							</c:if>
@@ -297,25 +271,25 @@
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLabel">Ready to
-											Leave?</h5>
+										<h5 class="modal-title" id="exampleModalLabel">로그아웃</h5>
 										<button class="close" type="button" data-dismiss="modal"
 											aria-label="Close">
 											<span aria-hidden="true">×</span>
 										</button>
 									</div>
-									<div class="modal-body">Select "Logout" below if you are
-										ready to end your current session.</div>
+									<div class="modal-body">로그아웃 하시겠습니까?</div>
 									<div class="modal-footer">
 										<button class="btn btn-secondary" type="button"
-											data-dismiss="modal">Cancel</button>
-										<a class="btn btn-primary" href="/member/logout">Logout</a>
+											data-dismiss="modal">취소</button>
+										<a class="btn btn-primary" href="/member/logout">로그아웃</a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</nav>
 					<!-- End of Topbar -->
+				
+					
 					
 </body>
 </html>

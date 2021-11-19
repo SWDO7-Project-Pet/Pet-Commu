@@ -1,22 +1,13 @@
 package com.pet.web.socket;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -24,30 +15,17 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
 public class SocketHandler extends TextWebSocketHandler{
+	HashMap<String, WebSocketSession> sessionMap = new HashMap<>(); //웹소켓 세션을 담아둘 맵
 	
-	//private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
-	private static final Logger log = LoggerFactory.getLogger(SocketHandler.class);
-	HashMap<String, WebSocketSession> sessionMap = new HashMap<String, WebSocketSession>();
-	
-	// 클라이언트와 연결 된 후
-	@SuppressWarnings("unchecked")
+	// 서버로 메세지가 도착했을 때 해주어야할 일들을 정의하는 메소드
 	@Override
-	public void afterConnectionEstablished(WebSocketSession session) throws Exception{		
-		//소켓 연결
-		super.afterConnectionEstablished(session);
-		sessionMap.put(session.getId(), session);
-		JSONObject obj = new JSONObject();
-		obj.put("type", "getId");
-		obj.put("sessionId", session.getId());
-		session.sendMessage(new TextMessage(obj.toJSONString()));
-	}
-	
-	// 클라이언트가 서버로 메세지 전송 처리
-	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+	public void handleTextMessage(WebSocketSession session, TextMessage message) {
 		//메시지 발송
-		String msg = message.getPayload();
+		
+		// 현재 웹소켓에 접속중인 id를 저장한다 msg에 저장
+		String msg = message.getPayload();	
 		JSONObject obj = jsonToObjectParser(msg);
+		
 		for(String key : sessionMap.keySet()) {
 			WebSocketSession wss = sessionMap.get(key);
 			try {
@@ -57,8 +35,21 @@ public class SocketHandler extends TextWebSocketHandler{
 			}
 		}
 	}
-
-	// 클라이언트가 연결을 끊음 처리
+	
+	// 연결이 성사 되고 나서 해야할 일
+	@SuppressWarnings("unchecked")
+	@Override
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		//소켓 연결
+		super.afterConnectionEstablished(session);
+		sessionMap.put(session.getId(), session);
+		JSONObject obj = new JSONObject();
+		obj.put("type", "getId");
+		obj.put("sessionId", session.getId());
+		session.sendMessage(new TextMessage(obj.toJSONString()));
+	}
+	
+	// 웹 소켓 연결이 종료되고 나서 서버단에서 실행해야할 일들을 정의해주는 메소드
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		//소켓 종료
@@ -66,7 +57,7 @@ public class SocketHandler extends TextWebSocketHandler{
 		super.afterConnectionClosed(session, status);
 	}
 	
-	// json
+	// json 데이터를 파싱해주는 함수
 	private static JSONObject jsonToObjectParser(String jsonStr) {
 		JSONParser parser = new JSONParser();
 		JSONObject obj = null;
@@ -77,5 +68,4 @@ public class SocketHandler extends TextWebSocketHandler{
 		}
 		return obj;
 	}
-	
 }

@@ -19,7 +19,8 @@
 		<typeAlias type="com.pet.web.vo.FreeBoardSaveVO" alias="FreeBoardSave"/>
 		
 		<!-- 메신저 -->
-		<typeAlias type="com.pet.web.vo.ChatVO" alias="Chat"/>
+		<typeAlias type="com.pet.web.vo.ChatRoomVO" alias="ChatRoom"/>
+		<typeAlias type="com.pet.web.vo.MessageVO" alias="Message"/>
 		
 		<!-- 사진게시판 -->
 		<typeAlias type="com.pet.web.vo.PhotoBoardSaveVO" alias="PhotoBoardSave"/>
@@ -35,6 +36,7 @@
 		<typeAlias type="com.pet.web.vo.TradeBoardSaveVO" alias="TradeBoardSave"/>
 		<typeAlias type="com.pet.web.vo.TradeBoardVO" alias="TradeBoard"/>
 		<typeAlias type="com.pet.web.vo.TradeHashtagVO" alias="TradeHashtag"/>
+		<typeAlias type="com.pet.web.vo.TradeReplyVO" alias="TradeReply"/>
 		
 	</typeAliases>
 	

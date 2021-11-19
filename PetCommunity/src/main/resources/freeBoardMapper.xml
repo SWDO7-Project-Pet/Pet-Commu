@@ -43,7 +43,7 @@
 		    ,free_board_title as freeBoardTitle
 		    ,free_board_content as freeBoardContent
 		    ,member_id as memberId
-		    ,to_char(free_board_indate, 'yy-MM-DD') as freeBoardIndate	 
+		    ,to_char(free_board_indate, 'yy-MM-DD HH24:MI:SS') as freeBoardIndate	 
 		    ,free_board_hits as freeBoardHits
 		    ,free_board_likes as freeBoardLikes
 		from
@@ -102,7 +102,7 @@
 	  	select
 	  		free_reply_num as freeReplyNum
 	  		,free_reply_content as freeReplyContent
-	  		,to_char(free_reply_indate, 'yy-MM-DD') as freeReplyIndate
+	  		,to_char(free_reply_indate, 'yy-MM-DD HH24:MI:SS') as freeReplyIndate
 	  		,free_board_num as freeBoardNum
 	  		,member_id as memberId
 	  	from
@@ -110,7 +110,7 @@
 	  	where
 	  		free_board_num = #{freeBoardNum}
 	  	order by
-	  		free_reply_indate
+	  		free_reply_indate desc
 	  </select>
 	  
 	  <!-- 댓글 삭제 -->

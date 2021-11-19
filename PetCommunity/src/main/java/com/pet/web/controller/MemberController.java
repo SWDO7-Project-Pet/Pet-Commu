@@ -45,8 +45,24 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/setting", method = RequestMethod.GET)
-	public String setting() {
+	public String setting(HttpSession session, String memberId, MultipartFile uploadFile) {
 		logger.info("setting 메소드 실행(GET)");
+		
+		String memberId1 = (String)session.getAttribute("memberId");
+		
+		MemberVO file = service.selectId(memberId1);
+		
+		String fileName = file.getMemberPhotoSt();
+		String pw = file.getMemberPw();
+		String name = file.getMemberNames();
+		String phone = file.getMemberPhone();
+		String birth = file.getMemberBirth();
+		
+		session.setAttribute("memberPhoto", fileName);
+		session.setAttribute("name", name);
+		session.setAttribute("pw", pw);
+		session.setAttribute("birth", birth);
+		session.setAttribute("phone", phone);
 		
 		return "member/setting";
 	}
@@ -56,8 +72,9 @@ public class MemberController {
 	public String join(String memberId, String memberPw, String memberNames, String memberBirth, String memberPhone, MultipartFile uploadFile) {
 		logger.info("join 메소드 실행(POST)");
 		
-		String saveFileName = FileService.saveFile(uploadFile, "c:/Upload Files");
-		boolean result = service.join(memberId, memberPw, memberNames, memberBirth, memberPhone, saveFileName, uploadFile.getOriginalFilename());
+		String saveFileName = FileService.saveFile(uploadFile, "C:/workspace/user");
+		String originalFilename = uploadFile.getOriginalFilename();
+		boolean result = service.join(memberId, memberPw, memberNames, memberBirth, memberPhone, saveFileName, originalFilename);
 		
 		String returnUrl;
 		if(result) {
@@ -80,6 +97,8 @@ public class MemberController {
 		MemberVO login = service.login(memberId, memberPw);
 		logger.info("login: {}", login);
 		
+		MemberVO file = service.selectId(memberId);
+		
 		String returnUrl;
 		if(login == null) {
 			logger.info("로그인 실패");
@@ -88,12 +107,17 @@ public class MemberController {
 		} else {
 			logger.info("로그인 성공");
 			session.setAttribute("memberId", memberId);
+			session.setAttribute("memberPhoto", file.getMemberPhotoSt());
+			
+			if(login.getMemberCode() == 9) {
+				session.setAttribute("code", login.getMemberCode());			
+			}
+			
 			returnUrl = "redirect:/";
 		}
 		
-		if(login.getMemberCode() == 9) {
-			session.setAttribute("code", login.getMemberCode());			
-		}
+
+
 		
 		return returnUrl;
 	}
@@ -103,6 +127,7 @@ public class MemberController {
 		logger.info("logout 메소드 실행(GET)");
 		
 		session.removeAttribute("memberId");
+		session.removeAttribute("code");
 		
 		return "redirect:/";
 	}
@@ -127,12 +152,12 @@ public class MemberController {
 	public String setting(HttpSession session, String memberPw, String memberNames, String memberBirth, String memberPhone, MultipartFile uploadFile) {
 		String memberId = (String)session.getAttribute("memberId");
 		
-		String saveFileName = FileService.saveFile(uploadFile, "c:/Upload Files");
+		String saveFileName = FileService.saveFile(uploadFile, "C:/workspace/user");
 		
 		MemberVO file = service.selectId(memberId);
 		
 		if (file.getMemberPhotoOr() != null) {
-			String filepath = "c:/Upload Files" + file.getMemberPhotoSt();
+			String filepath = "C:/workspace/user/" + file.getMemberPhotoSt();
 			FileService.deleteFile(filepath);
 		}
 

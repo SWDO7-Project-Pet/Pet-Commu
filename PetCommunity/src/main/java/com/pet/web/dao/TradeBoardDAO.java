@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.pet.web.vo.TradeBoardSaveVO;
 import com.pet.web.vo.TradeBoardVO;
+import com.pet.web.vo.TradeReplyVO;
 
 @Repository
 public class TradeBoardDAO {
@@ -209,6 +210,66 @@ public class TradeBoardDAO {
 		try {
 			mapper = session.getMapper(TradeBoardMapper.class);
 			result = mapper.getBoardList(tb);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	// 거래게시판 댓글
+	public int tradeReplyWrite(TradeReplyVO newReply) {
+		int result = 0;
+		TradeBoardMapper mapper = null;
+		
+		try {
+			mapper = session.getMapper(TradeBoardMapper.class);
+			result = mapper.tradeReplyWrite(newReply);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	// 댓글 보기
+	public ArrayList<TradeReplyVO> readAllTradeReply(int tradeBoardNum) {
+		ArrayList<TradeReplyVO> result = null;
+		TradeBoardMapper mapper = null;
+		
+		try {
+			mapper = session.getMapper(TradeBoardMapper.class);
+			result = mapper.readAllTradeReply(tradeBoardNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	// 댓글 삭제
+	public int tradeReplyDelete(int tradeReplyNum) {
+		int result = 0;
+		TradeBoardMapper mapper = null;
+		
+		try {
+			mapper = session.getMapper(TradeBoardMapper.class);
+			result = mapper.tradeReplyDelete(tradeReplyNum);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	// 댓글 수정
+	public int tradeReplyUpdate(TradeReplyVO reply) {
+		int result = 0;
+		TradeBoardMapper mapper = null;
+		
+		try {
+			mapper = session.getMapper(TradeBoardMapper.class);
+			result = mapper.tradeReplyUpdate(reply);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
